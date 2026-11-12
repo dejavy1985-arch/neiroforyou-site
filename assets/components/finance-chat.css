@@ -1,0 +1,118 @@
+.agent-chat {
+  display: grid;
+  gap: 16px;
+  margin: 14px 0;
+  padding: 22px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.025);
+}
+
+.agent-chat-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.agent-chat-top strong {
+  color: var(--black);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.agent-chat-top span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.chat-log {
+  display: grid;
+  gap: 10px;
+  min-height: 260px;
+}
+
+.chat-message {
+  display: grid;
+  max-width: 86%;
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.chat-message.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.chat-message-user {
+  justify-self: end;
+}
+
+.chat-message-agent {
+  justify-self: start;
+}
+
+.chat-bubble,
+.typing-dots {
+  min-height: 42px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.chat-message-user .chat-bubble {
+  background: var(--black);
+  color: var(--white);
+  border-bottom-right-radius: 5px;
+}
+
+.chat-message-agent .chat-bubble,
+.typing-dots {
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--black);
+  border-bottom-left-radius: 5px;
+}
+
+.typing-dots {
+  display: none;
+  align-items: center;
+  gap: 5px;
+  width: max-content;
+}
+
+.typing-dots.is-visible {
+  display: flex;
+}
+
+.typing-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.46);
+  animation: typingPulse 0.9s ease-in-out infinite;
+}
+
+.typing-dots span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.typing-dots span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+
+.agent-chat.is-animating .chat-message:not(.is-visible) { opacity: 0; transform: translateY(10px); }
+.typing-dots.is-visible + .chat-bubble { display: none; }
+@keyframes typingPulse {
+  0%, 80%, 100% { opacity: 0.3; transform: translateY(0); }
+  40% { opacity: 1; transform: translateY(-3px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chat-message, .typing-dots span { animation: none; transition: none; }
+}

@@ -1,0 +1,747 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=yes">
+    <title>AI-агент по поиску и сбору лидов | NeiroForYou</title>
+    <meta name="description" content="Находит в выбранных Telegram-сообществах сообщения с запросами на твои услуги. Отбирает подходящие обращения и передаёт их в таблицу или Telegram-бота со ссылкой на источник.">
+    <link rel="canonical" href="https://neiroforyou.ru/agents/telegram-demand/">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+
+
+    <style>
+      :root {
+        --white: #ffffff;
+        --black: #050505;
+        --ink: rgba(0, 0, 0, 0.88);
+        --muted: rgba(0, 0, 0, 0.58);
+        --line: rgba(0, 0, 0, 0.12);
+        --line-strong: rgba(0, 0, 0, 0.28);
+        --radius: 28px;
+        --cookie-offset: 0px;
+        font-family: "Inter", Arial, sans-serif;
+        color: var(--black);
+        background: var(--white);
+      }
+
+      html.cookie-banner-visible {
+        --cookie-offset: 136px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+        margin: 0;
+        background: var(--white);
+        overflow-x: hidden;
+      }
+
+      body {
+        padding-bottom: var(--cookie-offset);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .site-nav {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: calc(16px + env(safe-area-inset-top)) 16px 16px;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.82));
+        -webkit-backdrop-filter: blur(14px);
+        backdrop-filter: blur(14px);
+      }
+
+      .brand,
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .brand {
+        gap: 10px;
+        min-width: 0;
+      }
+
+      .brand-mark {
+        width: 34px;
+        height: 34px;
+        flex: 0 0 auto;
+      }
+
+      .brand-text {
+        color: var(--black);
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1;
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+      }
+
+      .back-link {
+        min-height: 38px;
+        padding: 0 16px;
+        border: 1px solid var(--line-strong);
+        border-radius: 999px;
+        color: var(--black);
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .page-main {
+        width: min(820px, 100%);
+        margin: 0 auto;
+        padding: 68px 16px 44px;
+      }
+
+      .page-kicker {
+        margin: 0 0 18px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.2;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0 0 18px;
+        color: var(--black);
+        font-size: clamp(32px, 6.4vw, 56px);
+        font-weight: 300;
+        line-height: 1;
+        letter-spacing: -0.04em;
+      }
+
+      .page-lead {
+        max-width: 620px;
+        margin: 0 0 16px;
+        color: var(--ink);
+        font-size: clamp(16px, 3.4vw, 20px);
+        font-weight: 400;
+        line-height: 1.3;
+        letter-spacing: -0.02em;
+      }
+
+      .page-description {
+        max-width: 640px;
+        margin: 0 0 40px;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.55;
+      }
+
+      .page-stack {
+        display: grid;
+        gap: 20px;
+      }
+
+      .process-panel {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.025);
+        padding: 24px;
+      }
+
+      .process-panel h2 {
+        margin: 0 0 14px;
+        color: var(--black);
+        font-size: clamp(20px, 4vw, 28px);
+        font-weight: 400;
+        line-height: 1.05;
+        letter-spacing: -0.035em;
+      }
+
+      .process-panel p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.55;
+      }
+
+      .page-block h2 {
+        margin: 0 0 14px;
+        color: var(--black);
+        font-size: clamp(20px, 4vw, 28px);
+        font-weight: 400;
+        line-height: 1.05;
+        letter-spacing: -0.035em;
+      }
+
+      .dash-list {
+        display: grid;
+        gap: 12px;
+        margin: 4px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .dash-list li {
+        position: relative;
+        padding-left: 26px;
+        color: var(--ink);
+        font-size: 16px;
+        line-height: 1.45;
+      }
+
+      .dash-list li::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: var(--black);
+      }
+
+      .steps {
+        display: grid;
+        gap: 14px;
+        margin: 4px 0 0;
+        padding: 0;
+        list-style: none;
+        counter-reset: step;
+      }
+
+      .steps li {
+        display: grid;
+        grid-template-columns: 34px minmax(0, 1fr);
+        gap: 12px;
+        align-items: start;
+        color: var(--ink);
+        font-size: 16px;
+        line-height: 1.45;
+      }
+
+      .steps li::before {
+        counter-increment: step;
+        content: counter(step);
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        color: var(--black);
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .ad-grid {
+        display: grid;
+        gap: 14px;
+        margin-top: 4px;
+      }
+
+      .feature-card {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.025);
+        padding: 22px;
+      }
+
+      .feature-card h3 {
+        margin: 0 0 10px;
+        color: var(--black);
+        font-size: clamp(18px, 3.6vw, 24px);
+        font-weight: 400;
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+      }
+
+      .feature-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.5;
+      }
+
+      .agent-price {
+        display: grid;
+        gap: 10px;
+        margin-top: 22px;
+        padding-top: 20px;
+        border-top: 1px solid var(--line);
+      }
+
+      .agent-price-main {
+        margin: 0;
+        color: var(--black) !important;
+        font-size: 28px !important;
+        font-weight: 600 !important;
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+      }
+
+      .agent-price-main span {
+        font-weight: 500;
+      }
+
+      .page-cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 54px;
+        margin-top: 18px;
+        padding: 0 24px;
+        border: 1px solid var(--black);
+        border-radius: 999px;
+        background: var(--black);
+        color: var(--white);
+        font-size: 14px;
+        font-weight: 600;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
+
+      .agent-price-main + .page-cta {
+        margin-top: 22px;
+      }
+
+      .page-cta:hover {
+        background: #202020;
+      }
+
+      .site-footer {
+        width: min(820px, 100%);
+        margin: 28px auto 0;
+        padding: 0 16px 32px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .site-footer p {
+        margin: 0;
+      }
+
+      .site-footer a {
+        color: inherit;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      .cookie-banner {
+        position: fixed;
+        left: 16px;
+        right: 16px;
+        bottom: calc(16px + env(safe-area-inset-bottom));
+        z-index: 100;
+        display: grid;
+        gap: 14px;
+        width: min(620px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.88);
+        color: var(--ink);
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.12);
+        -webkit-backdrop-filter: blur(18px);
+        backdrop-filter: blur(18px);
+      }
+
+      .cookie-banner[hidden] {
+        display: none;
+      }
+
+      .cookie-banner p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .cookie-banner a {
+        color: var(--black);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      .cookie-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .cookie-actions button {
+        min-height: 40px;
+        padding: 0 16px;
+        border-radius: 999px;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .cookie-accept {
+        border: 1px solid var(--black);
+        background: var(--black);
+        color: var(--white);
+      }
+
+      .cookie-decline {
+        border: 1px solid var(--line-strong);
+        background: transparent;
+        color: var(--black);
+      }
+
+      @media (min-width: 768px) {
+        .ad-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .agent-price-main {
+          font-size: 32px !important;
+        }
+      }
+
+      @media (max-width: 767px) {
+        html.cookie-banner-visible {
+          --cookie-offset: 166px;
+        }
+
+        .site-nav {
+          align-items: flex-start;
+        }
+
+        .back-link {
+          padding: 0 12px;
+          font-size: 11px;
+        }
+
+        .page-main {
+          padding-top: 48px;
+        }
+
+        .process-panel,
+        .feature-card {
+          padding: 18px;
+        }
+
+        .page-cta {
+          width: 100%;
+        }
+
+        .cookie-banner {
+          left: 10px;
+          right: 10px;
+          bottom: calc(10px + env(safe-area-inset-bottom));
+          width: calc(100% - 20px);
+          padding: 14px;
+          border-radius: 18px;
+        }
+
+        .cookie-actions {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .cookie-actions button {
+          width: 100%;
+          padding: 0 10px;
+        }
+      }
+      .site-nav { flex-wrap: wrap; }
+      .page-cta-secondary {
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        border: 1px solid var(--line-strong); border-radius: 999px;
+        background: transparent; color: var(--black); font-size: 14px; font-weight: 600;
+        cursor: pointer; transition: border-color 0.2s ease, background 0.2s ease;
+      }
+      .page-cta-secondary:hover { border-color: rgba(0, 0, 0, 0.46); }
+      .page-cta, .page-cta-secondary, .back-link {
+        width: min(240px, 100%); height: 48px; min-height: 48px; margin-top: 0;
+        padding: 0 16px; white-space: normal; text-align: center; flex: 0 0 auto;
+      }
+      .lead-page-intro { margin-bottom: 40px; }
+      .lead-page-intro .page-description { margin-bottom: 24px; }
+      .lead-page-caption { margin: 10px 0 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+      .lead-page-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+      .lead-page-example h2 {
+        margin: 0 0 18px; color: var(--black); font-size: clamp(20px, 4vw, 28px);
+        font-weight: 400; line-height: 1.05; letter-spacing: -0.035em;
+      }
+      .process-panel .lead-page-note { margin-top: 20px; }
+      .lead-page-example { margin-bottom: 12px; }
+
+    </style>
+    <link rel="stylesheet" href="/assets/components/lead-result.css">
+
+
+      <meta property="og:title" content="AI-агент по поиску и сбору лидов | NeiroForYou">
+      <meta property="og:description" content="Находит в выбранных Telegram-сообществах сообщения с запросами на твои услуги. Отбирает подходящие обращения и передаёт их в таблицу или Telegram-бота со ссылкой на источник.">
+      <meta property="og:url" content="https://neiroforyou.ru/agents/telegram-demand/">
+      <meta property="og:image" content="https://neiroforyou.ru/media/og-cover.jpg">
+      <meta property="og:type" content="website">
+      <meta property="og:site_name" content="NeiroForYou">
+      <meta property="og:locale" content="ru_RU">
+      <meta property="og:image:alt" content="NeiroForYou: AI-агенты, боты и приложения для бизнеса">
+      <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Service",
+      "@id": "https://neiroforyou.ru/agents/telegram-demand/#service",
+      "name": "AI-агент по поиску и сбору лидов",
+      "description": "Находит в выбранных Telegram-сообществах сообщения с запросами на твои услуги. Отбирает подходящие обращения и передаёт их в таблицу или Telegram-бота со ссылкой на источник.",
+      "url": "https://neiroforyou.ru/agents/telegram-demand/",
+      "provider": {
+        "@id": "https://neiroforyou.ru/#organization"
+      },
+      "areaServed": "RU",
+      "inLanguage": "ru-RU",
+      "offers": {
+        "@type": "Offer",
+        "url": "https://neiroforyou.ru/agents/telegram-demand/",
+        "description": "Разработка и настройка под нишу. Для работы нужен API-ключ; использование AI оплачивается отдельно.",
+        "price": "25000",
+        "priceCurrency": "RUB"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://neiroforyou.ru/agents/telegram-demand/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "NeiroForYou",
+          "item": "https://neiroforyou.ru/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "AI-агент по поиску и сбору лидов",
+          "item": "https://neiroforyou.ru/agents/telegram-demand/"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+      <link rel="stylesheet" href="/assets/site-motion.css?v=4">
+      <link rel="stylesheet" href="/assets/fonts/inter.css?v=20261014">
+  <link rel="stylesheet" href="/assets/site-enhancements.css?v=1">
+</head>
+  <body>
+    <nav class="site-nav" aria-label="Навигация">
+      <a class="brand" href="/" aria-label="Вернуться на главную">
+        <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true">
+          <rect x="11" y="7" width="5" height="26" rx="2.5" transform="rotate(-35 13.5 20)" fill="#050505"></rect>
+          <rect x="23" y="7" width="5" height="26" rx="2.5" transform="rotate(-35 25.5 20)" fill="#050505"></rect>
+        </svg>
+        <span class="brand-text">NeiroForYou</span>
+      </a>
+      <a class="back-link" href="/#solutions" data-metrika-goal="back_to_showcase">Вернуться к витрине</a>
+    </nav>
+
+    <main class="page-main">
+      <header class="lead-page-intro">
+        <p class="page-kicker">Витрина решений</p>
+        <h1>AI-агент по поиску и сбору лидов</h1>
+        <p class="page-description">Находит в выбранных Telegram-сообществах сообщения с запросами на твои услуги. Отбирает подходящие обращения и передаёт их в таблицу или Telegram-бота со ссылкой на источник.</p>
+        <p class="agent-price-main"><span>25 000 ₽</span></p>
+        <p class="lead-page-caption">Разработка и настройка под твою нишу.</p>
+        <div class="lead-page-actions">
+          <a class="page-cta" href="https://t.me/dejavy30" data-metrika-goal="request_leads_demo" target="_blank" rel="noopener noreferrer">Запросить демо</a>
+          <a class="page-cta-secondary" href="https://t.me/dejavy30" data-metrika-goal="click_telegram" target="_blank" rel="noopener noreferrer">Обсудить задачу</a>
+        </div>
+      </header>
+
+      <div class="page-stack">
+        <section class="lead-page-example" aria-labelledby="lead-example-title">
+          <h2 id="lead-example-title">Так выглядит найденный запрос</h2>
+          <!-- lead-result:start -->
+          <figure class="leads-example">
+            <div class="telegram-result">
+              <header class="telegram-result-header">
+
+                <div>
+                  <h3>AI-агент · пример результата</h3>
+                  <p>Пример результата · оформление адаптировано</p>
+                </div>
+              </header>
+              <article class="telegram-result-message">
+                <h4>ЗАПРОС НА ПОКУПКУ КВАРТИРЫ</h4>
+                <div class="telegram-result-part">
+                  <p class="telegram-result-label">Запрос</p>
+                  <p>Покупка квартиры в новостройке с рассрочкой.</p>
+                  <p>Город: Москва, метро Динамо</p>
+                  <p>Условия: первый взнос 30%, рассрочка на 3 года</p>
+                  <p>Бюджет: от 14,7 млн ₽ по контексту переписки</p>
+                </div>
+                <p class="telegram-result-status">Требует уточнения</p>
+                <div class="telegram-result-part">
+                  <p class="telegram-result-label">Фрагмент сообщения</p>
+                  <blockquote>Мне как раз рассрочка интересна, ПВ 30% и на 3 года, норм вариант, чтобы зафиксировать цену сейчас.</blockquote>
+                </div>
+                <div class="telegram-result-part">
+                  <p class="telegram-result-label">Почему агент отобрал запрос</p>
+                  <p>Автор выразил личный интерес к покупке и указал условия оплаты.</p>
+                </div>
+                <div class="telegram-result-part">
+                  <p class="telegram-result-label">Что уточнить</p>
+                  <p>Площадь, количество комнат и источник первого взноса.</p>
+                </div>
+                <div class="telegram-result-controls" aria-label="Пример кнопок рабочего бота">
+                  <span>Открыть источник</span>
+                  <span>Открыть сообщение</span>
+                </div>
+                <p class="telegram-result-footnote">В рабочем боте кнопки ведут к исходному сообщению.</p>
+              </article>
+            </div>
+            <figcaption>Сокращённый пример из работы агента. Оформление адаптировано, данные автора скрыты.</figcaption>
+          </figure>
+          <!-- lead-result:end -->
+        </section>
+
+        <section class="process-panel" aria-labelledby="lead-features-title">
+          <h2 id="lead-features-title">Что делает агент</h2>
+          <ul class="dash-list">
+            <li>Анализирует сообщения в выбранных сообществах.</li>
+            <li>Отбирает запросы по настроенным критериям.</li>
+            <li>Отсеивает рекламу и неподходящие сообщения.</li>
+            <li>Убирает повторяющиеся запросы.</li>
+            <li>Формирует карточку с кратким описанием потребности.</li>
+            <li>Передаёт результат в таблицу или Telegram-бота.</li>
+          </ul>
+        </section>
+
+        <section class="process-panel" aria-labelledby="lead-fields-title">
+          <h2 id="lead-fields-title">Что собирается в карточку</h2>
+          <ul class="dash-list">
+            <li>Текст и краткая суть запроса.</li>
+            <li>Источник и ссылка на сообщение, если доступны.</li>
+            <li>Дата.</li>
+            <li>Категория запроса.</li>
+            <li>Объяснение, почему сообщение подходит.</li>
+            <li>Город, бюджет и другие параметры, если они указаны.</li>
+            <li>Доступные сведения об авторе.</li>
+          </ul>
+          <p class="lead-page-note">Состав полей настраивается под твою задачу. Отсутствующие сведения агент не должен придумывать.</p>
+        </section>
+
+        <section class="process-panel" aria-labelledby="lead-setup-title">
+          <h2 id="lead-setup-title">Как проходит настройка</h2>
+          <ol class="steps">
+            <li>Определяем нишу и признаки подходящего запроса.</li>
+            <li>Выбираем доступные тематические сообщества.</li>
+            <li>Настраиваем критерии отбора и исключения.</li>
+            <li>Настраиваем карточку и способ получения результатов.</li>
+            <li>Проверяем работу на выбранных источниках.</li>
+          </ol>
+        </section>
+
+        <section class="process-panel" aria-labelledby="lead-price-title">
+          <h2 id="lead-price-title">Что входит в 25 000 ₽</h2>
+          <ul class="dash-list">
+            <li>Настройка агента под нишу.</li>
+            <li>Настройка источников и критериев поиска.</li>
+            <li>Настройка исключений и обработки повторов.</li>
+            <li>Настройка карточки запроса.</li>
+            <li>Настройка передачи результатов в таблицу или Telegram-бота.</li>
+            <li>Проверка перед запуском.</li>
+          </ul>
+          <p class="lead-page-note">Для работы агента обязательно нужен API-ключ. Расходы на использование API не входят в стоимость разработки 25 000 ₽ и оплачиваются отдельно.</p>
+        </section>
+
+        <section class="process-panel" aria-labelledby="lead-limits-title">
+          <h2 id="lead-limits-title">Что важно знать</h2>
+          <p>Агент помогает находить потенциальные обращения. Ты проверяешь найденные запросы и самостоятельно решаешь, с кем и как общаться.</p>
+          <ul class="dash-list lead-page-note">
+            <li>Используются только источники, к которым у заказчика есть законный доступ.</li>
+            <li>Работа с источниками учитывает правила платформы и применимое законодательство.</li>
+            <li>Публикация запроса не означает согласия автора на рекламу.</li>
+            <li>Агент не предназначен для массовой рассылки и не связывается с найденными людьми автоматически.</li>
+          </ul>
+        </section>
+
+        <section class="process-panel" aria-labelledby="lead-contact-title">
+          <h2 id="lead-contact-title">Попробуй агента перед заказом</h2>
+          <p>Запроси демо и посмотри, как выглядят найденные обращения.</p>
+          <p class="lead-page-note">Для демонстрации используется отдельное демо, без доступа к данным клиентов.</p>
+          <div class="lead-page-actions">
+            <a class="page-cta" href="https://t.me/dejavy30" data-metrika-goal="request_leads_demo" target="_blank" rel="noopener noreferrer">Запросить демо</a>
+            <a class="page-cta-secondary" href="https://t.me/dejavy30" data-metrika-goal="click_telegram" target="_blank" rel="noopener noreferrer">Обсудить задачу</a>
+            <a class="page-cta-secondary" href="/#solutions" data-metrika-goal="back_to_showcase">Вернуться к витрине</a>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer legal-footer" aria-label="Сведения об исполнителе и правовая информация">
+  <div class="legal-footer-grid">
+    <section aria-labelledby="executor-title">
+      <h2 id="executor-title">Исполнитель</h2>
+      <p>NeiroForYou</p>
+      <p>Хатченко Лариса Дмитриевна</p>
+      <p>Плательщик налога на профессиональный доход</p>
+      <p>ИНН 027759147558</p>
+      <p>Уфа</p>
+      <p><a href="tel:+79872444010">+7 987 244-40-10</a></p>
+      <p><a href="mailto:dejavy1985@gmail.com">dejavy1985@gmail.com</a></p>
+    </section>
+    <section aria-labelledby="legal-title">
+      <h2 id="legal-title">Правовая информация</h2>
+      <p><a href="/privacy/">Политика обработки персональных данных</a></p>
+      <p><button class="legal-text-button" type="button" data-cookie-settings>Настройки cookies</button></p>
+      <p><a href="/#how-to-order">Условия заказа</a></p>
+      <noscript><p>JavaScript отключён. Аналитика не запускается. Для изменения настроек включи JavaScript.</p></noscript>
+    </section>
+  </div>
+  <p class="legal-disclaimer">Instagram принадлежит компании Meta Platforms Inc., деятельность которой по реализации социальных сетей Facebook и Instagram запрещена в Российской Федерации по основаниям осуществления экстремистской деятельности.</p>
+</footer>
+<dialog class="consent-dialog" aria-labelledby="consent-title" data-consent-dialog>
+  <form method="dialog" data-consent-form>
+    <h2 id="consent-title">Настройки cookies</h2>
+    <p>Техническое хранение сохраняет твой выбор. Аналитика Яндекс.Метрики помогает понять, как пользуются сайтом.</p>
+    <p data-consent-status></p>
+    <label class="consent-choice"><input type="checkbox" name="analytics"> Разрешить аналитику Яндекс.Метрики</label>
+    <p>Отключение прекращает новую отправку аналитики, но не удаляет сведения, уже переданные Яндексу.</p>
+    <div class="consent-dialog-actions">
+      <button class="page-cta" type="submit" value="save" data-consent-save>Сохранить</button>
+      <button class="page-cta-secondary" type="button" data-consent-close>Закрыть без сохранения</button>
+    </div>
+  </form>
+</dialog>
+
+
+    <div class="cookie-banner" data-cookie-banner hidden role="dialog" aria-live="polite" aria-label="Согласие на cookies">
+      <p>
+        Мы используем cookies, чтобы понимать, как посетители пользуются сайтом.
+        Подробнее: в <a href="/privacy/">политике конфиденциальности</a>.
+      </p>
+      <div class="cookie-actions">
+        <button class="cookie-accept" type="button" data-cookie-accept>Принять</button>
+        <button class="cookie-decline" type="button" data-cookie-decline>Отклонить</button>
+      </div>
+    </div>
+
+    <script>
+
+    </script>
+    <script src="/assets/audio/voice.js?v=5" defer></script>
+      <script src="/assets/site-motion.js?v=4" defer></script>
+  <script src="/assets/site-consent.js?v=1" defer></script>
+</body>
+</html>

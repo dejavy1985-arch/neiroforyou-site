@@ -1,0 +1,64 @@
+/* Shared button geometry and quiet states. No decorative button animation. */
+:is(.primary-link,.page-cta,.page-cta-secondary,.solution-cta,.section-telegram,.hero-phone,.back-link,.phone-link),
+.content-section .audience-card {
+ box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center !important;
+ width:240px !important; max-width:100%; min-width:0 !important;
+ height:48px !important; min-height:48px !important; padding:0 12px !important;
+ gap:0; border-radius:999px; font-family:inherit; font-size:14px !important; font-weight:600;
+ line-height:1.25; letter-spacing:normal; text-align:center; white-space:normal; text-transform:none;
+ transform:none !important; box-shadow:none !important;
+ transition:background-color 160ms ease,border-color 160ms ease;
+}
+.site-nav .back-link { flex-shrink:1; }
+.primary-link:hover { background:#202020; }
+.back-link:hover { border-color:rgba(0,0,0,.42); }
+.solution-footer { flex-wrap:wrap; gap:14px; }
+.hero .audience-card {
+ justify-content:center; height:58px; min-height:58px; padding:0 18px; gap:0;
+ transform:none; box-shadow:none; transition:background-color 160ms ease,border-color 160ms ease;
+}
+.hero .audience-card:hover { opacity:1; }
+:is(.primary-link,.page-cta,.page-cta-secondary,.solution-cta,.section-telegram,.hero-phone,.back-link,.phone-link,.audience-card):active {
+ filter:brightness(.94); transform:none !important; box-shadow:none !important;
+}
+:is(.primary-link,.page-cta,.page-cta-secondary,.solution-cta,.section-telegram,.hero-phone,.back-link,.phone-link,.audience-card):focus-visible {
+ outline:2px solid #050505; outline-offset:4px;
+}
+#solutions .custom-solution .solution-cta:focus-visible { outline-color:#fff; }
+#solutions .feature-card { transition:border-color 180ms ease; }
+@media(hover:hover) {
+ #solutions .feature-card:hover { border-color:rgba(0,0,0,.32); }
+ #solutions .custom-solution:hover { border-color:#777; }
+}
+.lead-highlight-toggle {
+ padding:0; border:0; background:none; color:inherit; font:inherit; text-align:left;
+ text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:4px; cursor:pointer;
+}
+.lead-highlight-toggle:focus-visible { outline:2px solid currentColor; outline-offset:4px; border-radius:3px; }
+.telegram-result-part { border-radius:8px; transition:background-color 200ms ease,box-shadow 200ms ease; }
+.telegram-result-part.is-highlighted { background:rgba(0,0,0,.055); box-shadow:0 0 0 6px rgba(0,0,0,.055); }
+.founder-section { position:relative; min-height:0; padding-bottom:48px; }
+.compatible-anchor { position:absolute; top:0; scroll-margin-top:92px; }
+.founder-layout { display:grid; grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr); gap:clamp(28px,5vw,72px); align-items:start; }
+.founder-portrait { width:100%; max-width:460px; margin:auto; }
+.founder-portrait img {
+ display:block; width:100%; height:auto; aspect-ratio:1; object-fit:contain;
+ mask-image:linear-gradient(to right,transparent,#000 5%,#000 95%,transparent),linear-gradient(to bottom,transparent,#000 3%,#000 98.5%,transparent); mask-composite:intersect;
+ -webkit-mask-image:linear-gradient(to right,transparent,#000 5%,#000 95%,transparent),linear-gradient(to bottom,transparent,#000 3%,#000 98.5%,transparent); -webkit-mask-composite:source-in;
+}
+.founder-copy { min-width:0; color:var(--ink); font-size:18px; line-height:1.55; }
+.founder-copy h2 { margin:18px 0 24px; }
+.founder-copy p { margin:0 0 22px; }
+.founder-copy .section-kicker { font-size:12px; }
+.founder-copy .founder-statement { color:var(--black); font-size:clamp(22px,2.5vw,28px); font-weight:300; line-height:1.35; letter-spacing:-.035em; }
+.founder-copy .founder-location { color:var(--muted); font-size:14px; margin:28px 0 22px; }
+@media(max-width:767px) {
+ .founder-layout { grid-template-columns:minmax(0,1fr); gap:24px; }
+ .founder-portrait { max-width:360px; }
+ .founder-copy { font-size:16px; }
+ .founder-section { padding-top:48px; padding-bottom:24px; }
+}
+@media(prefers-reduced-motion:reduce) {
+ :is(.primary-link,.page-cta,.page-cta-secondary,.solution-cta,.section-telegram,.hero-phone,.back-link,.phone-link,.audience-card),
+ #solutions .feature-card,.telegram-result-part { transition:none !important; }
+}

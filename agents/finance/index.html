@@ -1,0 +1,863 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=yes">
+    <title>Финансовый AI-агент | NeiroForYou</title>
+    <meta name="description" content="Принимает доходы и расходы в Telegram и собирает управленческий Excel-отчёт с анализом.">
+    <link rel="canonical" href="https://neiroforyou.ru/agents/finance/">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+
+
+    <style>
+      :root {
+        --white: #ffffff;
+        --black: #050505;
+        --ink: rgba(0, 0, 0, 0.88);
+        --muted: rgba(0, 0, 0, 0.58);
+        --line: rgba(0, 0, 0, 0.12);
+        --line-strong: rgba(0, 0, 0, 0.28);
+        --radius: 28px;
+        --cookie-offset: 0px;
+        font-family: "Inter", Arial, sans-serif;
+        color: var(--black);
+        background: var(--white);
+      }
+
+      html.cookie-banner-visible {
+        --cookie-offset: 136px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+        margin: 0;
+        background: var(--white);
+        overflow-x: hidden;
+      }
+
+      body {
+        padding-bottom: var(--cookie-offset);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .site-nav {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: calc(16px + env(safe-area-inset-top)) 16px 16px;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.82));
+        -webkit-backdrop-filter: blur(14px);
+        backdrop-filter: blur(14px);
+      }
+
+      .brand,
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .brand {
+        gap: 10px;
+        min-width: 0;
+      }
+
+      .brand-mark {
+        width: 34px;
+        height: 34px;
+        flex: 0 0 auto;
+      }
+
+      .brand-text {
+        color: var(--black);
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1;
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+      }
+
+      .back-link {
+        min-height: 38px;
+        padding: 0 16px;
+        border: 1px solid var(--line-strong);
+        border-radius: 999px;
+        color: var(--black);
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .page-main {
+        width: min(820px, 100%);
+        margin: 0 auto;
+        padding: 68px 16px 44px;
+      }
+
+      .page-kicker {
+        margin: 0 0 18px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.2;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0 0 18px;
+        color: var(--black);
+        font-size: clamp(32px, 6.4vw, 56px);
+        font-weight: 300;
+        line-height: 1;
+        letter-spacing: -0.04em;
+      }
+
+      .page-lead {
+        max-width: 620px;
+        margin: 0 0 16px;
+        color: var(--ink);
+        font-size: clamp(16px, 3.4vw, 20px);
+        font-weight: 400;
+        line-height: 1.3;
+        letter-spacing: -0.02em;
+      }
+
+      .page-description {
+        max-width: 640px;
+        margin: 0 0 40px;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.55;
+      }
+
+      .page-stack {
+        display: grid;
+        gap: 20px;
+      }
+
+      .process-panel {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.025);
+        padding: 24px;
+      }
+
+      .process-panel h2 {
+        margin: 0 0 14px;
+        color: var(--black);
+        font-size: clamp(20px, 4vw, 28px);
+        font-weight: 400;
+        line-height: 1.05;
+        letter-spacing: -0.035em;
+      }
+
+      .process-panel p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.55;
+      }
+
+      .page-block h2 {
+        margin: 0 0 14px;
+        color: var(--black);
+        font-size: clamp(20px, 4vw, 28px);
+        font-weight: 400;
+        line-height: 1.05;
+        letter-spacing: -0.035em;
+      }
+
+      .page-block p {
+        margin: 0 0 14px;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.55;
+      }
+
+      .dash-list {
+        display: grid;
+        gap: 12px;
+        margin: 4px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .dash-list li {
+        position: relative;
+        padding-left: 26px;
+        color: var(--ink);
+        font-size: 16px;
+        line-height: 1.45;
+      }
+
+      .dash-list li::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: var(--black);
+      }
+
+      .steps {
+        display: grid;
+        gap: 14px;
+        margin: 4px 0 0;
+        padding: 0;
+        list-style: none;
+        counter-reset: step;
+      }
+
+      .steps li {
+        display: grid;
+        grid-template-columns: 34px minmax(0, 1fr);
+        gap: 12px;
+        align-items: start;
+        color: var(--ink);
+        font-size: 16px;
+        line-height: 1.45;
+      }
+
+      .steps li::before {
+        counter-increment: step;
+        content: counter(step);
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        color: var(--black);
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .ad-grid {
+        display: grid;
+        gap: 14px;
+        margin-top: 4px;
+      }
+
+      .preview-grid {
+        display: grid;
+        gap: 14px;
+        margin-top: 4px;
+      }
+
+      .feature-card {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.025);
+        padding: 22px;
+      }
+
+      .feature-card h3 {
+        margin: 0 0 10px;
+        color: var(--black);
+        font-size: clamp(18px, 3.6vw, 24px);
+        font-weight: 400;
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+      }
+
+      .feature-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.5;
+      }
+
+      .preview-note {
+        margin: 0 0 14px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.4;
+      }
+
+      .preview-table {
+        display: grid;
+        gap: 8px;
+      }
+
+      .preview-row {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 10px;
+        padding-top: 8px;
+        border-top: 1px solid var(--line);
+        font-size: 14px;
+        line-height: 1.35;
+      }
+
+      .preview-row:first-child {
+        padding-top: 0;
+        border-top: none;
+      }
+
+      .preview-row span:first-child {
+        color: var(--ink);
+      }
+
+      .preview-row span:last-child {
+        flex: 0 0 auto;
+        color: var(--black);
+        font-weight: 500;
+        white-space: nowrap;
+      }
+
+      .preview-row.is-negative span:last-child {
+        color: #b3241c;
+      }
+
+      .preview-list {
+        display: grid;
+        gap: 10px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .preview-list li {
+        padding-top: 10px;
+        border-top: 1px solid var(--line);
+        color: var(--ink);
+        font-size: 14px;
+        line-height: 1.4;
+      }
+
+      .preview-list li:first-child {
+        padding-top: 0;
+        border-top: none;
+      }
+
+      .preview-list strong {
+        display: block;
+        margin-bottom: 2px;
+        color: var(--black);
+        font-weight: 500;
+      }
+
+      .agent-price {
+        display: grid;
+        gap: 10px;
+        margin-top: 22px;
+        padding-top: 20px;
+        border-top: 1px solid var(--line);
+      }
+
+      .agent-price-main {
+        margin: 0;
+        color: var(--black) !important;
+        font-size: 28px !important;
+        font-weight: 600 !important;
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+      }
+
+      .agent-price-main span {
+        font-weight: 500;
+      }
+
+      .price-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 22px;
+      }
+
+      .page-cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 54px;
+        padding: 0 24px;
+        border: 1px solid var(--black);
+        border-radius: 999px;
+        background: var(--black);
+        color: var(--white);
+        font-size: 14px;
+        font-weight: 600;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
+
+      .page-cta:hover {
+        background: #202020;
+      }
+
+      .page-cta-secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 54px;
+        padding: 0 24px;
+        border: 1px solid var(--line-strong);
+        border-radius: 999px;
+        background: transparent;
+        color: var(--black);
+        font-size: 14px;
+        font-weight: 600;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: border-color 0.2s ease, background 0.2s ease;
+      }
+
+      .page-cta-secondary:hover {
+        border-color: rgba(0, 0, 0, 0.46);
+      }
+
+      .site-footer {
+        width: min(820px, 100%);
+        margin: 28px auto 0;
+        padding: 0 16px 32px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .site-footer p {
+        margin: 0;
+      }
+
+      .site-footer a {
+        color: inherit;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      .cookie-banner {
+        position: fixed;
+        left: 16px;
+        right: 16px;
+        bottom: calc(16px + env(safe-area-inset-bottom));
+        z-index: 100;
+        display: grid;
+        gap: 14px;
+        width: min(620px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.88);
+        color: var(--ink);
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.12);
+        -webkit-backdrop-filter: blur(18px);
+        backdrop-filter: blur(18px);
+      }
+
+      .cookie-banner[hidden] {
+        display: none;
+      }
+
+      .cookie-banner p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .cookie-banner a {
+        color: var(--black);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      .cookie-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .cookie-actions button {
+        min-height: 40px;
+        padding: 0 16px;
+        border-radius: 999px;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .cookie-accept {
+        border: 1px solid var(--black);
+        background: var(--black);
+        color: var(--white);
+      }
+
+      .cookie-decline {
+        border: 1px solid var(--line-strong);
+        background: transparent;
+        color: var(--black);
+      }
+
+      @media (min-width: 768px) {
+        .ad-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .preview-grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .agent-price-main {
+          font-size: 32px !important;
+        }
+      }
+
+      @media (max-width: 767px) {
+        html.cookie-banner-visible {
+          --cookie-offset: 166px;
+        }
+
+        .site-nav {
+          align-items: flex-start;
+        }
+
+        .back-link {
+          padding: 0 12px;
+          font-size: 11px;
+        }
+
+        .page-main {
+          padding-top: 48px;
+        }
+
+        .process-panel,
+        .feature-card {
+          padding: 18px;
+        }
+
+        .page-cta,
+        .page-cta-secondary {
+          width: 100%;
+        }
+
+        .cookie-banner {
+          left: 10px;
+          right: 10px;
+          bottom: calc(10px + env(safe-area-inset-bottom));
+          width: calc(100% - 20px);
+          padding: 14px;
+          border-radius: 18px;
+        }
+
+        .cookie-actions {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .cookie-actions button {
+          width: 100%;
+          padding: 0 10px;
+        }
+      }
+      .site-nav { flex-wrap: wrap; }
+      .page-cta, .page-cta-secondary, .back-link {
+        width: min(240px, 100%); height: 48px; min-height: 48px; margin-top: 0;
+        padding: 0 16px; white-space: normal; text-align: center; flex: 0 0 auto;
+      }
+      .finance-intro { margin-bottom: 40px; }
+      .finance-intro .page-description { margin-bottom: 24px; }
+      .finance-price-caption { margin: 10px 0 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+      .finance-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+      .process-panel .finance-note { margin-top: 20px; }
+      .finance-glossary { margin: 14px 0 20px; }
+      .finance-glossary p + p { margin-top: 8px; }
+      .finance-chat-caption { font-size: 13px !important; }
+
+    </style>
+    <link rel="stylesheet" href="/assets/components/finance-chat.css">
+
+
+      <meta property="og:title" content="Финансовый AI-агент | NeiroForYou">
+      <meta property="og:description" content="Принимает доходы и расходы в Telegram и собирает управленческий Excel-отчёт с анализом.">
+      <meta property="og:url" content="https://neiroforyou.ru/agents/finance/">
+      <meta property="og:image" content="https://neiroforyou.ru/media/og-cover.jpg">
+      <meta property="og:type" content="website">
+      <meta property="og:site_name" content="NeiroForYou">
+      <meta property="og:locale" content="ru_RU">
+      <meta property="og:image:alt" content="NeiroForYou: AI-агенты, боты и приложения для бизнеса">
+      <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Service",
+      "@id": "https://neiroforyou.ru/agents/finance/#service",
+      "name": "Финансовый AI-агент",
+      "description": "Принимает доходы и расходы в Telegram и собирает управленческий Excel-отчёт с анализом.",
+      "url": "https://neiroforyou.ru/agents/finance/",
+      "provider": {
+        "@id": "https://neiroforyou.ru/#organization"
+      },
+      "areaServed": "RU",
+      "inLanguage": "ru-RU",
+      "offers": {
+        "@type": "Offer",
+        "url": "https://neiroforyou.ru/agents/finance/",
+        "description": "Настройка агента. Использование AI через API оплачивается отдельно.",
+        "price": "15000",
+        "priceCurrency": "RUB"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://neiroforyou.ru/agents/finance/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "NeiroForYou",
+          "item": "https://neiroforyou.ru/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Финансовый AI-агент",
+          "item": "https://neiroforyou.ru/agents/finance/"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+      <link rel="stylesheet" href="/assets/site-motion.css?v=4">
+      <link rel="stylesheet" href="/assets/fonts/inter.css?v=20261014">
+  <link rel="stylesheet" href="/assets/site-enhancements.css?v=1">
+</head>
+  <body>
+    <nav class="site-nav" aria-label="Навигация">
+      <a class="brand" href="/" aria-label="Вернуться на главную">
+        <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true">
+          <rect x="11" y="7" width="5" height="26" rx="2.5" transform="rotate(-35 13.5 20)" fill="#050505"></rect>
+          <rect x="23" y="7" width="5" height="26" rx="2.5" transform="rotate(-35 25.5 20)" fill="#050505"></rect>
+        </svg>
+        <span class="brand-text">NeiroForYou</span>
+      </a>
+      <a class="back-link" href="/#solutions" data-metrika-goal="back_to_showcase">Вернуться к витрине</a>
+    </nav>
+
+    <main class="page-main">
+      <header class="finance-intro">
+        <p class="page-kicker">Витрина решений</p>
+        <h1>Финансовый AI-агент</h1>
+        <p class="page-description">Принимает доходы и расходы в Telegram и собирает управленческий Excel-отчёт с анализом.</p>
+        <p class="agent-price-main"><span>15 000 ₽</span></p>
+        <p class="finance-price-caption">Создание и настройка. Использование AI через API оплачивается отдельно.</p>
+        <div class="finance-actions">
+          <a class="page-cta" href="https://t.me/dejavy30" data-metrika-goal="click_telegram" target="_blank" rel="noopener noreferrer">Обсудить задачу</a>
+          <a class="page-cta-secondary" href="/media/primer-otcheta.xlsx" data-metrika-goal="download_finance_example" download>Скачать пример</a>
+        </div>
+      </header>
+      <div class="page-stack">
+        <section class="page-block finance-chat-section" aria-labelledby="finance-chat-title">
+          <h2 id="finance-chat-title">Как вносить доходы и расходы</h2>
+          <p>Отправляешь короткое сообщение в Telegram. Агент записывает операцию в категории твоего бизнеса.</p>
+          <div class="agent-chat" data-agent-chat aria-label="Пример переписки с финансовым агентом">
+            <div class="agent-chat-top">
+              <strong>AI-агент</strong>
+              <span>Telegram</span>
+            </div>
+            <div class="chat-log">
+              <div class="chat-message chat-message-user" data-chat-message data-text="Расход 3400, бензин">
+                <div class="chat-bubble">Расход 3400, бензин</div>
+              </div>
+              <div class="chat-message chat-message-user" data-chat-message data-text="Приход 27000, курс">
+                <div class="chat-bubble">Приход 27000, курс</div>
+              </div>
+              <div class="chat-message chat-message-agent" data-chat-message data-agent-reply data-text="Записала. Транспорт и Выручка.">
+                <div class="typing-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+                <div class="chat-bubble">Записала. Транспорт и Выручка.</div>
+              </div>
+              <div class="chat-message chat-message-user" data-chat-message data-text="Собери БДР за прошлый месяц">
+                <div class="chat-bubble">Собери БДР за прошлый месяц</div>
+              </div>
+              <div class="chat-message chat-message-agent" data-chat-message data-agent-reply data-text="Готово. Отчёт собран. Показываю не остаток на счёте, а то, что ты действительно заработал.">
+                <div class="typing-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+                <div class="chat-bubble">Готово. Отчёт собран. Показываю не остаток на счёте, а то, что ты действительно заработал.</div>
+              </div>
+            </div>
+          </div>
+          <p class="finance-chat-caption">Анимированный пример переписки. Это демонстрация, а не действующий чат.</p>
+        </section>
+
+        <section class="page-block finance-report" aria-labelledby="finance-report-title">
+                  <h2 id="finance-report-title">Какой отчёт получаешь</h2>
+                  <p>Три листа из реального отчёта: сокращённо, для примера.</p>
+                  <div class="finance-glossary">
+                    <p>БДР: бюджет доходов и расходов.</p>
+                    <p>EBITDA: финансовый результат до процентов, налогов и амортизации.</p>
+                  </div>
+                  <div class="preview-grid">
+                    <article class="feature-card">
+                      <h3>Дашборд</h3>
+                      <p class="preview-note">Ключевые показатели за период</p>
+                      <div class="preview-table">
+                        <div class="preview-row"><span>Выручка</span><span>166 000 ₽</span></div>
+                        <div class="preview-row"><span>Валовая прибыль</span><span>48 000 ₽</span></div>
+                        <div class="preview-row is-negative"><span>EBITDA</span><span>−119 000 ₽</span></div>
+                        <div class="preview-row is-negative"><span>Чистая прибыль</span><span>−339 000 ₽</span></div>
+                      </div>
+                    </article>
+
+                    <article class="feature-card">
+                      <h3>БДР</h3>
+                      <p class="preview-note">Статьи и доля от выручки</p>
+                      <div class="preview-table">
+                        <div class="preview-row"><span>Итого выручка</span><span>166 000 ₽</span></div>
+                        <div class="preview-row"><span>Валовая прибыль</span><span>28,9%</span></div>
+                        <div class="preview-row"><span>Аренда</span><span>69,3%</span></div>
+                        <div class="preview-row is-negative"><span>EBITDA</span><span>−71,7%</span></div>
+                      </div>
+                    </article>
+
+                    <article class="feature-card">
+                      <h3>Риски и рекомендации</h3>
+                      <p class="preview-note">Проверка данных и что делать дальше</p>
+                      <ul class="preview-list">
+                        <li><strong>Высокая доля аренды:</strong> около 69% выручки. Требуется оценка с учётом конкретного бизнеса.</li>
+                        <li><strong>Неполные данные</strong>зарплата не разделена на инструкторов и админ-персонал.</li>
+                        <li><strong>Рекомендация</strong>пересмотреть аренду и детализировать статью «Зарплата».</li>
+                      </ul>
+                    </article>
+                  </div>
+                  <div class="finance-actions">
+                    <a class="page-cta-secondary" href="/media/primer-otcheta.xlsx" data-metrika-goal="download_finance_example" download>Скачать пример</a>
+                  </div>
+                </section>
+
+        <section class="process-panel" aria-labelledby="finance-features-title">
+          <h2 id="finance-features-title">Возможности агента</h2>
+          <ul class="dash-list">
+            <li>Принимает доходы и расходы через Telegram, коротким сообщением.</li>
+            <li>Формирует БДР за месяц или выбранный период.</li>
+            <li>Собирает Excel-отчёт с несколькими листами: дашбордом, БДР, проверкой данных и рекомендациями.</li>
+            <li>Анализирует показатели, находит риски и даёт рекомендации.</li>
+            <li>Отмечает, каких данных не хватает.</li>
+          </ul>
+          <p class="finance-note">Остаток на счёте: это ещё не прибыль. Отчёт помогает увидеть финансовый результат бизнеса.</p>
+        </section>
+
+        <section class="process-panel" aria-labelledby="finance-team-title">
+          <h2 id="finance-team-title">Настройка под бизнес и работу сотрудников</h2>
+          <p>Статьи доходов и расходов, категории, структура отчёта и набор листов настраиваются под конкретный бизнес.</p>
+          <ul class="dash-list finance-note">
+            <li>Агентом могут пользоваться до 10 сотрудников.</li>
+            <li>Руководитель и сотрудники вносят операции через Telegram-бота.</li>
+            <li>В журнале фиксируется, кто и какие данные внёс.</li>
+            <li>Это позволяет находить ошибки и уточнять спорные операции.</li>
+          </ul>
+          <p class="finance-note">Агент подходит владельцам малого бизнеса, которые сами следят за деньгами. Для полного отчёта нужно регулярно передавать доходы и расходы.</p>
+        </section>
+
+        <section class="process-panel" aria-labelledby="finance-includes-title">
+          <h2 id="finance-includes-title">Что входит в 15 000 ₽</h2>
+          <ul class="dash-list">
+            <li>Создание и настройка агента.</li>
+            <li>Подключение приёма операций через Telegram.</li>
+            <li>Настройка категорий и структуры БДР.</li>
+            <li>Настройка Excel-отчёта.</li>
+            <li>Настройка периода отчётности.</li>
+            <li>Проверка перед запуском.</li>
+          </ul>
+        </section>
+
+        <section class="process-panel" aria-labelledby="finance-expenses-title">
+          <h2 id="finance-expenses-title">Дополнительные расходы и важные условия</h2>
+          <p>Для работы нужен API-ключ AI-сервиса. Использование модели оплачивается заказчиком отдельно от создания агента. Расход зависит от выбранного сервиса и объёма работы.</p>
+          <ul class="dash-list finance-note">
+            <li>Это управленческий отчёт. Он не заменяет бухгалтерскую и налоговую отчётность.</li>
+            <li>Недостающие данные отмечаются отдельно.</li>
+            <li>Агент не придумывает отсутствующие данные.</li>
+          </ul>
+        </section>
+
+        <section class="process-panel" aria-labelledby="finance-contact-title">
+          <h2 id="finance-contact-title">Разберём финансовый учёт твоего бизнеса</h2>
+          <div class="finance-actions">
+            <a class="page-cta" href="https://t.me/dejavy30" data-metrika-goal="click_telegram" target="_blank" rel="noopener noreferrer">Обсудить задачу</a>
+            <a class="page-cta-secondary" href="/#solutions" data-metrika-goal="back_to_showcase">Вернуться к витрине</a>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer legal-footer" aria-label="Сведения об исполнителе и правовая информация">
+  <div class="legal-footer-grid">
+    <section aria-labelledby="executor-title">
+      <h2 id="executor-title">Исполнитель</h2>
+      <p>NeiroForYou</p>
+      <p>Хатченко Лариса Дмитриевна</p>
+      <p>Плательщик налога на профессиональный доход</p>
+      <p>ИНН 027759147558</p>
+      <p>Уфа</p>
+      <p><a href="tel:+79872444010">+7 987 244-40-10</a></p>
+      <p><a href="mailto:dejavy1985@gmail.com">dejavy1985@gmail.com</a></p>
+    </section>
+    <section aria-labelledby="legal-title">
+      <h2 id="legal-title">Правовая информация</h2>
+      <p><a href="/privacy/">Политика обработки персональных данных</a></p>
+      <p><button class="legal-text-button" type="button" data-cookie-settings>Настройки cookies</button></p>
+      <p><a href="/#how-to-order">Условия заказа</a></p>
+      <noscript><p>JavaScript отключён. Аналитика не запускается. Для изменения настроек включи JavaScript.</p></noscript>
+    </section>
+  </div>
+  <p class="legal-disclaimer">Instagram принадлежит компании Meta Platforms Inc., деятельность которой по реализации социальных сетей Facebook и Instagram запрещена в Российской Федерации по основаниям осуществления экстремистской деятельности.</p>
+</footer>
+<dialog class="consent-dialog" aria-labelledby="consent-title" data-consent-dialog>
+  <form method="dialog" data-consent-form>
+    <h2 id="consent-title">Настройки cookies</h2>
+    <p>Техническое хранение сохраняет твой выбор. Аналитика Яндекс.Метрики помогает понять, как пользуются сайтом.</p>
+    <p data-consent-status></p>
+    <label class="consent-choice"><input type="checkbox" name="analytics"> Разрешить аналитику Яндекс.Метрики</label>
+    <p>Отключение прекращает новую отправку аналитики, но не удаляет сведения, уже переданные Яндексу.</p>
+    <div class="consent-dialog-actions">
+      <button class="page-cta" type="submit" value="save" data-consent-save>Сохранить</button>
+      <button class="page-cta-secondary" type="button" data-consent-close>Закрыть без сохранения</button>
+    </div>
+  </form>
+</dialog>
+
+
+    <div class="cookie-banner" data-cookie-banner hidden role="dialog" aria-live="polite" aria-label="Согласие на cookies">
+      <p>
+        Мы используем cookies, чтобы понимать, как посетители пользуются сайтом.
+        Подробнее: в <a href="/privacy/">политике конфиденциальности</a>.
+      </p>
+      <div class="cookie-actions">
+        <button class="cookie-accept" type="button" data-cookie-accept>Принять</button>
+        <button class="cookie-decline" type="button" data-cookie-decline>Отклонить</button>
+      </div>
+    </div>
+
+    <script>
+
+    </script>
+    <script src="/assets/components/finance-chat.js" defer></script>
+    <script src="/assets/audio/voice.js?v=5" defer></script>
+      <script src="/assets/site-motion.js?v=4" defer></script>
+  <script src="/assets/site-consent.js?v=1" defer></script>
+</body>
+</html>

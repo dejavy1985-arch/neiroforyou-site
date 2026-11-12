@@ -1,0 +1,2217 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=yes">
+    <meta name="yandex-verification" content="f3cc66b529885e60">
+    <title>AI-агенты, боты и приложения для бизнеса — NeiroForYou</title>
+    <meta name="description" content="Лариса Хатченко создаёт AI-агентов, Telegram-ботов и приложения под задачи бизнеса: поиск лидов, ответы клиентам и отчёты. Уфа, работа удалённо.">
+    <link rel="canonical" href="https://neiroforyou.ru/">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <meta property="og:title" content="AI-агенты, боты и приложения для бизнеса — NeiroForYou">
+    <meta property="og:description" content="Лариса Хатченко создаёт AI-агентов, Telegram-ботов и приложения под задачи бизнеса: поиск лидов, ответы клиентам и отчёты. Уфа, работа удалённо.">
+    <meta property="og:image" content="https://neiroforyou.ru/media/og-cover.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:alt" content="NeiroForYou: AI-агенты для бизнеса">
+    <meta property="og:url" content="https://neiroforyou.ru/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="NeiroForYou">
+    <meta property="og:locale" content="ru_RU">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://neiroforyou.ru/media/og-cover.jpg">
+    <link rel="alternate" type="text/plain" href="https://neiroforyou.ru/llms.txt" title="NeiroForYou для AI-поиска">
+
+
+
+    <style>
+      :root {
+        --white: #ffffff;
+        --black: #050505;
+        --ink: rgba(0, 0, 0, 0.88);
+        --muted: rgba(0, 0, 0, 0.58);
+        --line: rgba(0, 0, 0, 0.12);
+        --line-strong: rgba(0, 0, 0, 0.28);
+        --glass-bg: rgba(255, 255, 255, 0.01);
+        --dark-glass: rgba(8, 8, 8, 0.26);
+        --dark-line: rgba(255, 255, 255, 0.22);
+        --radius: 28px;
+        --cookie-offset: 0px;
+        font-family: "Inter", Arial, sans-serif;
+        color: var(--black);
+        background: var(--white);
+      }
+
+      html.cookie-banner-visible {
+        --cookie-offset: 136px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        min-height: 100%;
+        scroll-behavior: smooth;
+        background: var(--white);
+      }
+
+      body {
+        min-height: 100%;
+        margin: 0;
+        overflow-x: hidden;
+        background: var(--white);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      a[href] {
+        cursor: pointer;
+      }
+
+      svg {
+        display: block;
+      }
+
+      .page {
+        min-height: 100%;
+        background: var(--white);
+      }
+
+      .liquid-glass {
+        position: relative;
+        isolation: isolate;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: var(--glass-bg);
+        -webkit-backdrop-filter: blur(4px);
+        backdrop-filter: blur(4px);
+        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      }
+
+      .liquid-glass::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        border-radius: inherit;
+        padding: 1px;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.7),
+          rgba(255, 255, 255, 0.05) 48%,
+          rgba(255, 255, 255, 0.45)
+        );
+        -webkit-mask:
+          linear-gradient(#000 0 0) content-box,
+          linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+      }
+
+      .site-nav {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 50;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: calc(16px + env(safe-area-inset-top)) 16px 16px;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.74) 72%, transparent);
+        -webkit-backdrop-filter: blur(14px);
+        backdrop-filter: blur(14px);
+        pointer-events: none;
+      }
+
+      .site-nav > * {
+        pointer-events: auto;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+      }
+
+      .brand-mark {
+        width: 34px;
+        height: 34px;
+        flex: 0 0 auto;
+      }
+
+      .brand-text {
+        display: inline;
+        color: var(--black);
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1;
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+      }
+
+      .nav-telegram,
+      .hero-telegram,
+      .hero-phone,
+      .section-telegram {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border-radius: 999px;
+        font-weight: 600;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+
+      .nav-telegram {
+        min-height: 38px;
+        padding: 0 16px;
+        background: var(--black);
+        color: var(--white);
+        font-size: 12px;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+      }
+
+      .hero {
+        position: relative;
+        min-height: 100vh;
+        min-height: 100svh;
+        min-height: 100dvh;
+        display: flex;
+        align-items: flex-end;
+        overflow: hidden;
+        background: var(--white);
+        color: var(--black);
+        scroll-margin-top: 90px;
+      }
+
+      .hero-media {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        overflow: hidden;
+        pointer-events: none;
+        background: #f3f3f3;
+      }
+
+      .hero-media video {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+        object-position: 50% 25%;
+        opacity: 0;
+        transform: scale(1.04);
+        animation: videoIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      .video-bottom-blur {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+        height: 58%;
+        pointer-events: none;
+        -webkit-backdrop-filter: blur(18px);
+        backdrop-filter: blur(18px);
+        -webkit-mask-image: linear-gradient(to top, #000 0%, rgba(0, 0, 0, 0.86) 48%, transparent 100%);
+        mask-image: linear-gradient(to top, #000 0%, rgba(0, 0, 0, 0.86) 48%, transparent 100%);
+      }
+
+      .hero-fade {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 2;
+        height: 62%;
+        pointer-events: none;
+        background: linear-gradient(to top, #ffffff 0%, rgba(255, 255, 255, 0.88) 46%, transparent 100%);
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 30;
+        width: 100%;
+        display: grid;
+        gap: 22px;
+        padding: 170px 16px calc(24px + env(safe-area-inset-bottom) + var(--cookie-offset));
+      }
+
+      .hero-copy {
+        display: grid;
+        gap: 18px;
+        max-width: 920px;
+      }
+
+      .eyebrow,
+      .section-kicker {
+        margin: 0;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.2;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      .hero h1,
+      .section-title,
+      .contact-title {
+        margin: 0;
+        color: var(--black);
+        font-weight: 300;
+        letter-spacing: -0.04em;
+      }
+
+      .hero h1 {
+        max-width: 780px;
+        font-size: clamp(30px, 7.8vw, 42px);
+        line-height: 1;
+      }
+
+      .hero-lead {
+        max-width: 670px;
+        margin: 0;
+        color: var(--ink);
+        font-size: clamp(15px, 4vw, 20px);
+        font-weight: 400;
+        line-height: 1.22;
+        letter-spacing: -0.03em;
+      }
+
+      .hero-actions,
+      .audience-row,
+      .social-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .audience-row {
+        flex-direction: column;
+        align-items: stretch;
+        max-width: 590px;
+      }
+
+      .hero-telegram,
+      .section-telegram {
+        min-height: 54px;
+        padding: 0 24px;
+        background: var(--black);
+        color: var(--white);
+        font-size: 14px;
+        border: 1px solid var(--black);
+        transition: background 0.2s ease, transform 0.2s ease;
+      }
+
+      .hero-telegram:hover,
+      .section-telegram:hover {
+        background: #202020;
+      }
+
+      .hero-phone {
+        min-height: 54px;
+        padding: 0 20px;
+        border: 1px solid var(--line-strong);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.2);
+        color: var(--black);
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1;
+        -webkit-backdrop-filter: blur(8px);
+        backdrop-filter: blur(8px);
+        transition: border-color 0.2s ease, background 0.2s ease;
+      }
+
+      .hero-phone:hover {
+        border-color: rgba(0, 0, 0, 0.46);
+        background: rgba(255, 255, 255, 0.34);
+      }
+
+      .hero-choice {
+        max-width: 520px;
+        margin: 0;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.35;
+      }
+
+      .audience-card,
+      .service-orb,
+      .social-link {
+        cursor: pointer;
+        transition: border-color 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+      }
+
+      .audience-card {
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        min-height: 58px;
+        width: 100%;
+        padding: 17px 18px;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.2);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        color: var(--black);
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 1.25;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .audience-card:hover {
+        border-color: rgba(0, 0, 0, 0.36);
+        background: rgba(255, 255, 255, 0.32);
+        opacity: 0.92;
+      }
+
+      .hero-side {
+        display: grid;
+        gap: 12px;
+      }
+
+      .service-orb {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        width: 100%;
+        min-height: 58px;
+        padding: 16px 18px;
+        border: 1px solid rgba(0, 0, 0, 0.18);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.18);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        color: var(--black);
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        line-height: 1.25;
+        text-transform: uppercase;
+      }
+
+      .service-orb:hover {
+        border-color: rgba(0, 0, 0, 0.34);
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      .social-links {
+        display: grid;
+        gap: 10px;
+        width: min(230px, 100%);
+        justify-content: stretch;
+      }
+
+      .social-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 8px;
+        min-height: 44px;
+        flex: 1 1 145px;
+        padding: 0 14px;
+        border: 1px solid rgba(0, 0, 0, 0.16);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.24);
+        -webkit-backdrop-filter: blur(8px);
+        backdrop-filter: blur(8px);
+        color: var(--black);
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1;
+      }
+
+      .hero .social-link {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.08);
+        -webkit-backdrop-filter: blur(8px);
+        backdrop-filter: blur(8px);
+        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      }
+
+      .social-link:hover {
+        border-color: rgba(0, 0, 0, 0.32);
+        background: rgba(255, 255, 255, 0.36);
+        opacity: 0.92;
+      }
+
+      .hero .social-link:hover {
+        border-color: rgba(255, 255, 255, 0.34);
+        background: rgba(255, 255, 255, 0.14);
+      }
+
+      .social-link svg {
+        width: 16px;
+        height: 16px;
+        flex: 0 0 auto;
+      }
+
+      .content-section {
+        position: relative;
+        min-height: 100vh;
+        min-height: 100svh;
+        min-height: 100dvh;
+        padding: 92px 16px;
+        background: var(--white);
+        color: var(--black);
+        scroll-margin-top: 92px;
+      }
+
+      .section-inner {
+        width: min(1180px, 100%);
+        margin: 0 auto;
+      }
+
+      .business-section {
+        overflow: hidden;
+        isolation: isolate;
+      }
+
+      .business-section .section-inner {
+        position: relative;
+        z-index: 1;
+      }
+
+      .business-section .automation-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .automation-grid .feature-card {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .automation-contact {
+        display: grid;
+        gap: 18px;
+        margin-top: 28px;
+      }
+
+      #social-agents {
+        scroll-margin-top: 110px;
+      }
+
+      @media (min-width: 768px) {
+        .business-section .automation-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      .business-background {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        overflow: hidden;
+        pointer-events: none;
+        background: var(--white);
+      }
+
+      .business-background::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(255, 255, 255, 0.62);
+        pointer-events: none;
+      }
+
+      .business-background video,
+      .business-background-poster {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+        object-position: center;
+        opacity: 0.38;
+      }
+
+      .business-background-poster {
+        display: none;
+      }
+
+      .leads-layout {
+        display: grid;
+        gap: 32px;
+        align-items: start;
+      }
+
+      .leads-layout > * { min-width: 0; }
+      .leads-copy .section-head { margin-bottom: 28px; }
+      .leads-copy .steps { grid-template-columns: minmax(0, 1fr); }
+      .leads-copy .steps li { grid-template-columns: 34px minmax(0, 1fr); align-items: center; }
+      .leads-copy .steps li::before { content: counter(step, decimal-leading-zero); }
+      .leads-price {
+        margin: 32px 0 18px;
+        font-size: clamp(36px, 4vw, 54px);
+        font-weight: 400;
+        line-height: 1;
+        letter-spacing: -0.04em;
+      }
+      .leads-demo-note {
+        margin: 0 0 18px;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.5;
+      }
+      .leads-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+      .leads-actions a { white-space: normal; text-align: center; }
+      @media (min-width: 1000px) {
+        .leads-layout { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px; }
+      }
+      @media (max-width: 767px) {
+        .leads-actions { flex-direction: column; }
+        .leads-actions a { width: 100%; min-height: 54px; }
+      }
+
+      .section-head {
+        display: grid;
+        gap: 18px;
+        max-width: 900px;
+        margin-bottom: 28px;
+      }
+
+      .section-title,
+      .contact-title {
+        font-size: clamp(28px, 5vw, 46px);
+        line-height: 1;
+      }
+
+      .section-title span {
+        display: block;
+      }
+
+      .section-lead {
+        max-width: 720px;
+        margin: 0;
+        color: var(--muted);
+        font-size: clamp(16px, 2.4vw, 22px);
+        line-height: 1.25;
+        letter-spacing: -0.02em;
+      }
+
+      .feature-grid,
+      .audience-grid,
+      .contact-grid,
+      .price-grid,
+      .ad-grid {
+        display: grid;
+        gap: 14px;
+      }
+
+      .feature-card,
+      .process-panel,
+      .fit-card,
+      .about-card,
+      .price-card,
+      .agent-chat,
+      .final-band {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.025);
+      }
+
+      .feature-card,
+      .fit-card,
+      .about-card,
+      .price-card {
+        padding: 22px;
+      }
+
+      .feature-card h3,
+      .process-panel h3,
+      .fit-card h3,
+      .about-card h3,
+      .price-card h3 {
+        margin: 0 0 14px;
+        color: var(--black);
+        font-size: clamp(20px, 4vw, 30px);
+        font-weight: 400;
+        line-height: 1.02;
+        letter-spacing: -0.035em;
+      }
+
+      .feature-card p,
+      .process-panel p,
+      .fit-card p,
+      .about-card p,
+      .price-card p,
+      .agent-chat p,
+      .final-band p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.5;
+      }
+
+      .feature-card p + p,
+      .about-card p + p,
+      .price-card p + p {
+        margin-top: 14px;
+      }
+
+      .process-panel {
+        margin: 14px 0;
+        padding: 24px;
+      }
+
+      .steps {
+        display: grid;
+        gap: 12px;
+        margin: 20px 0 0;
+        padding: 0;
+        list-style: none;
+        counter-reset: step;
+      }
+
+      .steps li {
+        display: grid;
+        grid-template-columns: 34px minmax(0, 1fr);
+        gap: 12px;
+        align-items: start;
+        color: var(--ink);
+        font-size: 16px;
+        line-height: 1.42;
+      }
+
+      .steps li::before {
+        counter-increment: step;
+        content: counter(step);
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        color: var(--black);
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .fit-card ul {
+        display: grid;
+        gap: 10px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .fit-card li {
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.4;
+      }
+
+      .fit-card strong {
+        color: var(--black);
+        font-weight: 500;
+      }
+
+      .dash-list {
+        display: grid;
+        gap: 12px;
+        margin: 20px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .dash-list li {
+        position: relative;
+        padding-left: 26px;
+        color: var(--ink);
+        font-size: 16px;
+        line-height: 1.45;
+      }
+
+      .dash-list li::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: var(--black);
+      }
+
+      .contact-section {
+        padding-bottom: calc(36px + env(safe-area-inset-bottom));
+      }
+
+      .contact-grid {
+        align-items: start;
+      }
+
+      .about-card {
+        display: grid;
+        gap: 18px;
+      }
+
+      .about-name {
+        color: var(--black);
+        font-size: clamp(26px, 6vw, 42px);
+        font-weight: 400;
+        line-height: 1;
+        letter-spacing: -0.04em;
+      }
+
+      .price-grid {
+        margin-top: 14px;
+      }
+
+      .price-card {
+        min-height: 180px;
+      }
+
+      .price-line {
+        color: var(--black);
+        font-size: clamp(24px, 6vw, 38px);
+        font-weight: 300;
+        line-height: 1.05;
+        letter-spacing: -0.04em;
+      }
+
+      .price-line span {
+        color: var(--black);
+        font-weight: 500;
+      }
+
+      .agent-price {
+        display: grid;
+        gap: 10px;
+        margin-top: 22px;
+        padding-top: 20px;
+        border-top: 1px solid var(--line);
+      }
+
+      .agent-price p {
+        margin: 0;
+      }
+
+      .agent-price-main {
+        color: var(--black) !important;
+        font-size: clamp(20px, 3.4vw, 30px) !important;
+        font-weight: 300;
+        line-height: 1.08 !important;
+        letter-spacing: -0.035em;
+      }
+
+      .agent-price-main span {
+        font-weight: 500;
+      }
+
+      .feature-card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      .solution-price {
+        margin-top: auto !important;
+        margin-right: 0;
+        margin-bottom: 0;
+        margin-left: 0;
+        padding-top: 16px;
+        border-top: 1px solid var(--line);
+        color: var(--black) !important;
+        font-size: clamp(19px, 3vw, 26px) !important;
+        font-weight: 300;
+        line-height: 1.1 !important;
+        letter-spacing: -0.035em;
+      }
+
+      .solution-price span {
+        font-weight: 500;
+      }
+
+      .solution-footer .solution-price {
+        margin-top: 0 !important;
+        padding-top: 0;
+        border-top: none;
+      }
+
+      .feature-card-clickable {
+        position: relative;
+      }
+
+      .solution-footer {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        margin-top: auto;
+        padding-top: 16px;
+        border-top: 1px solid var(--line);
+      }
+
+      .solution-cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 0 18px;
+        border-radius: 999px;
+        background: var(--black);
+        color: var(--white);
+        font-size: 14px;
+        font-weight: 600;
+        white-space: nowrap;
+        transition: background 0.2s ease;
+      }
+
+      .solution-cta:hover {
+        background: #202020;
+      }
+
+      .solution-cta::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+      }
+
+      .solutions-group { margin-top: 48px; }
+      .solutions-group-title {
+        display: flex; align-items: center; gap: 24px; margin: 0 0 24px;
+        color: var(--black); font-size: clamp(24px, 3vw, 34px);
+        font-weight: 400; line-height: 1.1; letter-spacing: -0.035em;
+      }
+      .solutions-group-title::after { content: ""; flex: 1; min-width: 20px; border-top: 1px solid var(--line); }
+      #solutions .solutions-grid { grid-template-columns: minmax(0, 1fr); }
+      #solutions .feature-card h4 {
+        margin: 0 0 14px; color: var(--black); font-size: clamp(20px, 4vw, 30px);
+        font-weight: 400; line-height: 1.02; letter-spacing: -0.035em;
+      }
+      #solutions .solution-footer { flex-direction: column; align-items: flex-start; }
+      #solutions .solution-detail { margin: 0; font-size: 14px; line-height: 1.5; }
+      #solutions .solution-cta,
+      #solutions .solutions-contact .section-telegram {
+        width: min(240px, 100%); height: 48px; min-height: 48px;
+        padding: 0 16px; font-size: 14px; white-space: normal; text-align: center;
+      }
+      .solutions-contact { display: grid; justify-items: center; gap: 18px; margin-top: 48px; text-align: center; }
+      @media (min-width: 768px) {
+        #solutions .solutions-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      }
+      @media (min-width: 1100px) {
+        #solutions .solutions-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      }
+
+      #solutions .custom-solution { background: linear-gradient(135deg, #363636 0%, #202020 100%); border-color: #494949; color: #fff; }
+      #solutions .custom-solution h4, #solutions .custom-solution .solution-price { color: #fff !important; }
+      #solutions .custom-solution .solution-price { border-color: rgba(255,255,255,.22); }
+      #solutions .custom-solution p:not(.solution-price) { color: #dedede; }
+      #solutions .custom-solution .solution-cta { background: #505050; }
+      #solutions .custom-solution .solution-cta:hover { background: #626262; }
+      #solutions .custom-solution .solution-cta::after { content: none; }
+      @media (min-width: 768px) {
+        .solutions-management-grid { grid-template-rows: repeat(3, auto); row-gap: 0; }
+        .solutions-management-grid .feature-card { display: grid; grid-template-rows: subgrid; grid-row: span 3; }
+      }
+
+      .price-note {
+        margin-top: 14px;
+        padding: 20px;
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.5;
+      }
+
+      .contact-grid-single {
+        max-width: 720px;
+      }
+
+      .final-band {
+        display: grid;
+        gap: 18px;
+        margin-top: 16px;
+        padding: 24px;
+      }
+
+      .site-footer {
+        display: grid;
+        gap: 4px;
+        margin-top: 18px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .site-footer p {
+        margin: 0;
+      }
+
+      .site-footer a {
+        color: inherit;
+        text-decoration: underline;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 3px;
+      }
+
+      .site-footer a:hover {
+        color: var(--black);
+      }
+
+      .cookie-banner {
+        position: fixed;
+        left: 16px;
+        right: 16px;
+        bottom: calc(16px + env(safe-area-inset-bottom));
+        z-index: 100;
+        display: grid;
+        gap: 14px;
+        width: min(620px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.88);
+        color: var(--ink);
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.12);
+        -webkit-backdrop-filter: blur(18px);
+        backdrop-filter: blur(18px);
+      }
+
+      .cookie-banner[hidden] {
+        display: none;
+      }
+
+      .cookie-banner p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .cookie-banner a {
+        color: var(--black);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      .cookie-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .cookie-actions button {
+        min-height: 40px;
+        padding: 0 16px;
+        border-radius: 999px;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .cookie-accept {
+        border: 1px solid var(--black);
+        background: var(--black);
+        color: var(--white);
+      }
+
+      .cookie-decline {
+        border: 1px solid var(--line-strong);
+        background: transparent;
+        color: var(--black);
+      }
+
+      .final-band h3 {
+        margin: 0;
+        color: var(--black);
+        font-size: clamp(28px, 7vw, 54px);
+        font-weight: 300;
+        line-height: 0.98;
+        letter-spacing: -0.045em;
+      }
+
+      .contact-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .phone-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 54px;
+        padding: 0 20px;
+        border: 1px solid var(--line-strong);
+        border-radius: 999px;
+        color: var(--black);
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1;
+        cursor: pointer;
+      }
+
+      .phone-link:hover {
+        border-color: rgba(0, 0, 0, 0.46);
+      }
+
+      @keyframes videoIn {
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+
+
+      .order-list { display: grid; gap: 14px; }
+      .order-step, .order-support { border: 1px solid var(--line); border-radius: 22px; background: rgba(255,255,255,.8); }
+      .order-step summary { display: grid; grid-template-columns: 30px minmax(0,1fr) 24px; gap: 18px; padding: 24px; cursor: pointer; list-style: none; }
+      .order-step summary::-webkit-details-marker { display: none; }
+      .order-step summary:focus-visible { outline: 2px solid var(--black); outline-offset: 4px; border-radius: 22px; }
+      .order-number { color: var(--muted); }
+      .order-step strong { display: block; font-size: 22px; font-weight: 400; }
+      .order-step small { display: block; margin-top: 8px; font-size: 16px; line-height: 1.5; color: var(--muted); }
+      .order-sign::before { content: '+'; font-size: 28px; }
+      .order-step[open] .order-sign::before { content: '−'; }
+      .order-body { padding: 0 24px 24px; line-height: 1.6; color: var(--muted); }
+      .order-body p { margin: 0; padding-top: 20px; border-top: 1px solid var(--line); }
+      .order-support { padding: 24px; margin-top: 18px; }
+      .order-support h3 { margin: 0 0 12px; font-size: 24px; font-weight: 400; }
+      .order-support p { margin: 0; color: var(--muted); line-height: 1.6; }
+      .order-actions { margin-top: 24px; text-align: center; }
+      #how-to-order .section-telegram { width: min(240px,100%); height: 48px; min-height: 48px; padding: 0 12px; background: #202020; color: white; }
+      #how-to-order .section-telegram:hover { background: #333; }
+      @media(max-width:600px) { .order-step summary { padding: 20px 16px; gap: 10px; grid-template-columns: 24px minmax(0,1fr) 20px; } .order-step strong { font-size: 20px; } .order-body { padding: 0 16px 20px; } }
+
+      .reveal {
+        opacity: 0;
+        filter: blur(20px);
+        transform: translateY(40px);
+        transition:
+          opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+          filter 1s cubic-bezier(0.16, 1, 0.3, 1),
+          transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .reveal.is-visible {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .business-background video {
+          display: none;
+        }
+
+        .business-background-poster {
+          display: block;
+        }
+
+        .reveal,
+        .chat-message {
+          opacity: 1;
+          filter: none;
+          transform: none;
+          transition: none;
+        }
+
+        .typing-dots span {
+          animation: none;
+        }
+      }
+
+      @media (min-width: 768px) {
+        .site-nav {
+          padding: 24px 32px;
+        }
+
+        .brand-mark {
+          width: 40px;
+          height: 40px;
+        }
+
+        .nav-telegram {
+          min-height: 42px;
+          padding: 0 20px;
+          font-size: 13px;
+        }
+
+        .hero-content {
+          grid-template-columns: minmax(0, 1fr) 320px;
+          align-items: end;
+          gap: 28px;
+          padding: 190px 32px 34px;
+        }
+
+        .hero h1 {
+          font-size: clamp(38px, 4vw, 54px);
+        }
+
+        .hero-lead {
+          font-size: clamp(17px, 1.7vw, 22px);
+        }
+
+        .audience-card {
+          width: min(590px, 100%);
+        }
+
+        .ad-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .hero-side {
+          justify-items: end;
+        }
+
+        .service-orb {
+          width: 180px;
+          height: 180px;
+          align-content: center;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+          padding: 22px;
+          border-radius: 50%;
+          text-align: center;
+        }
+
+        .social-links {
+          justify-self: end;
+          justify-content: stretch;
+        }
+
+        .social-link {
+          flex: 0 0 auto;
+        }
+
+        .content-section {
+          padding: 120px 32px;
+        }
+
+        .section-head {
+          margin-bottom: 36px;
+        }
+
+        .feature-grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .solution-footer {
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .solution-cta {
+          flex: 0 0 auto;
+          min-height: 40px;
+          padding: 0 16px;
+          font-size: 13px;
+        }
+
+        .audience-grid,
+        .price-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .contact-grid {
+          grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+          gap: 18px;
+        }
+
+        .contact-grid-single {
+          grid-template-columns: minmax(0, 1fr);
+        }
+
+        .process-panel,
+        .final-band {
+          padding: 32px;
+        }
+
+        .steps {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        .steps li {
+          grid-template-columns: 1fr;
+        }
+
+        .final-band {
+          grid-template-columns: minmax(0, 1fr) auto;
+          align-items: end;
+        }
+      }
+
+      @media (max-width: 767px) {
+        html.cookie-banner-visible {
+          --cookie-offset: 166px;
+        }
+
+        .hero-media {
+          top: 0;
+          height: 54vh;
+          height: 54svh;
+          bottom: auto;
+          opacity: 0.26;
+        }
+
+        .video-bottom-blur {
+          height: 72%;
+          -webkit-backdrop-filter: blur(20px);
+          backdrop-filter: blur(20px);
+          -webkit-mask-image: linear-gradient(to top, #000 0%, rgba(0, 0, 0, 0.9) 62%, transparent 100%);
+          mask-image: linear-gradient(to top, #000 0%, rgba(0, 0, 0, 0.9) 62%, transparent 100%);
+        }
+
+        .hero-fade {
+          height: 84%;
+          background: linear-gradient(to top, #ffffff 0%, #ffffff 58%, rgba(255, 255, 255, 0.78) 78%, transparent 100%);
+        }
+
+        .hero-content {
+          min-height: 100vh;
+          min-height: 100svh;
+          min-height: 100dvh;
+          align-content: end;
+        }
+
+        .section-telegram,
+        .phone-link {
+          width: 100%;
+        }
+
+        .hero-actions {
+          display: none;
+        }
+
+        .hero-telegram,
+        .hero-phone {
+          width: 100%;
+          min-width: 0;
+          padding: 0 10px;
+          font-size: 12px;
+        }
+
+        .content-section {
+          padding-top: 86px;
+        }
+
+        .cookie-banner {
+          left: 10px;
+          right: 10px;
+          bottom: calc(10px + env(safe-area-inset-bottom));
+          width: calc(100% - 20px);
+          padding: 14px;
+          border-radius: 18px;
+        }
+
+        .cookie-actions {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .cookie-actions button {
+          width: 100%;
+          padding: 0 10px;
+        }
+      }
+
+      @media (max-width: 390px) {
+        .nav-telegram {
+          padding: 0 13px;
+          font-size: 11px;
+        }
+
+        .hero-content {
+          gap: 16px;
+          padding-top: 128px;
+          padding-left: 14px;
+          padding-right: 14px;
+        }
+
+        .hero-copy {
+          gap: 14px;
+        }
+
+        .hero h1 {
+          font-size: clamp(28px, 7.8vw, 34px);
+        }
+
+        .hero-lead {
+          font-size: 15px;
+        }
+
+        .social-link {
+          flex-basis: 100%;
+        }
+      }
+      /* Узкий диапазон, где карточка витрины слишком тесная: цена и кнопка
+         в одну строку не помещаются, и кнопка вылезала за границы карточки.
+         Перенос возвращает её внутрь. Шире 1199px правило не действует,
+         поэтому вид карточек на больших экранах не меняется. */
+      @media (min-width: 768px) and (max-width: 1199px) {
+        .solution-footer {
+          flex-wrap: wrap;
+        }
+      }
+
+    </style>
+    <link rel="stylesheet" href="/assets/components/lead-result.css">
+
+      <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://neiroforyou.ru/#website",
+      "name": "NeiroForYou",
+      "url": "https://neiroforyou.ru/",
+      "inLanguage": "ru-RU",
+      "description": "Лариса Хатченко создаёт AI-агентов, Telegram-ботов и приложения под задачи бизнеса: поиск лидов, ответы клиентам и отчёты. Уфа, работа удалённо.",
+      "publisher": {
+        "@id": "https://neiroforyou.ru/#organization"
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://neiroforyou.ru/#larisa",
+      "name": "Лариса Хатченко",
+      "url": "https://neiroforyou.ru/#about",
+      "jobTitle": "Основатель NeiroForYou",
+      "worksFor": {
+        "@id": "https://neiroforyou.ru/#organization"
+      },
+      "sameAs": [
+        "https://www.instagram.com/mamavdele.ai",
+        "https://t.me/dejavy30"
+      ],
+      "description": "Семь лет управляла ресторанами. Создаёт AI-агентов, ботов и приложения для бизнеса. Уфа, работа удалённо.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Уфа",
+        "addressCountry": "RU"
+      }
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://neiroforyou.ru/#organization",
+      "founder": {
+        "@id": "https://neiroforyou.ru/#larisa"
+      },
+      "name": "NeiroForYou",
+      "url": "https://neiroforyou.ru/",
+      "description": "AI-агенты, Telegram-боты, приложения, сайты и AI-видео под задачи бизнеса. Уфа, работа удалённо.",
+      "areaServed": "RU",
+      "telephone": "+79872444010",
+      "sameAs": [
+        "https://www.instagram.com/mamavdele.ai",
+        "https://t.me/dejavy30"
+      ],
+      "knowsAbout": [
+        "AI-агент по поиску и сбору лидов",
+        "Telegram-бот с AI-ассистентом",
+        "Telegram-бот по сценарию",
+        "AI-агент для Threads",
+        "AI-агент для Instagram",
+        "AI-радар для Threads",
+        "Финансовый AI-агент",
+        "Сайты под ключ",
+        "AI-видео под ключ",
+        "Музыкальное приложение для бизнеса",
+        "Автоматизация под твою задачу"
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Уфа",
+        "addressCountry": "RU"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+79872444010",
+        "contactType": "sales",
+        "availableLanguage": "ru"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Решения NeiroForYou",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "url": "https://neiroforyou.ru/agents/telegram-demand/",
+            "description": "Разработка и настройка под нишу. Для работы нужен API-ключ; использование AI оплачивается отдельно.",
+            "price": "25000",
+            "priceCurrency": "RUB",
+            "itemOffered": {
+              "@type": "Service",
+              "@id": "https://neiroforyou.ru/agents/telegram-demand/#service",
+              "name": "AI-агент по поиску и сбору лидов",
+              "description": "Находит в выбранных Telegram-сообществах сообщения с запросами на твои услуги. Отбирает подходящие обращения и передаёт их в таблицу или Telegram-бота со ссылкой на источник.",
+              "url": "https://neiroforyou.ru/agents/telegram-demand/",
+              "provider": {
+                "@id": "https://neiroforyou.ru/#organization"
+              },
+              "areaServed": "RU",
+              "inLanguage": "ru-RU"
+            }
+          },
+          {
+            "@type": "Offer",
+            "url": "https://neiroforyou.ru/services/ai-assistant-bot/",
+            "description": "Создание и настройка бота. Сервер и использование AI оплачиваются отдельно.",
+            "price": "35000",
+            "priceCurrency": "RUB",
+            "itemOffered": {
+              "@type": "Service",
+              "@id": "https://neiroforyou.ru/services/ai-assistant-bot/#service",
+              "name": "Telegram-бот с AI-ассистентом",
+              "description": "Отвечает на вопросы по материалам твоего бизнеса, принимает текстовые и голосовые сообщения. Говорящий аватар представляет твой проект.",
+              "url": "https://neiroforyou.ru/services/ai-assistant-bot/",
+              "provider": {
+                "@id": "https://neiroforyou.ru/#organization"
+              },
+              "areaServed": "RU",
+              "inLanguage": "ru-RU"
+            }
+          },
+          {
+            "@type": "Offer",
+            "url": "https://neiroforyou.ru/services/telegram-bot/",
+            "description": "Базовый вариант. Дополнительные функции рассчитываются отдельно. Без AI-ассистента и аватара.",
+            "price": "15000",
+            "priceCurrency": "RUB",
+            "itemOffered": {
+              "@type": "Service",
+              "@id": "https://neiroforyou.ru/services/telegram-bot/#service",
+              "name": "Telegram-бот по сценарию",
+              "description": "Бот с базовым набором функций: работает по заданным кнопкам, шагам и ответам. Базовый вариант: 15 000 ₽; дополнительные функции рассчитываются отдельно.",
+              "url": "https://neiroforyou.ru/services/telegram-bot/",
+              "provider": {
+                "@id": "https://neiroforyou.ru/#organization"
+              },
+              "areaServed": "RU",
+              "inLanguage": "ru-RU"
+            }
+          },
+          {
+            "@type": "Offer",
+            "url": "https://neiroforyou.ru/agents/threads/",
+            "description": "Создание и настройка. Ответы на комментарии подключаются отдельно; использование AI оплачивается отдельно.",
+            "price": "15000",
+            "priceCurrency": "RUB",
+            "itemOffered": {
+              "@type": "Service",
+              "@id": "https://neiroforyou.ru/agents/threads/#service",
+              "name": "AI-агент для Threads",
+              "description": "Готовит посты под твою тему и стиль, публикует по расписанию и присылает отчёт.",
+              "url": "https://neiroforyou.ru/agents/threads/",
+              "provider": {
+                "@id": "https://neiroforyou.ru/#organization"
+              },
+              "areaServed": "RU",
+              "inLanguage": "ru-RU"
+            }
+          },
+          {
+            "@type": "Offer",
+            "url": "https://neiroforyou.ru/agents/instagram/",
+            "description": "Создание и настройка агента.",
+            "price": "15000",
+            "priceCurrency": "RUB",
+            "itemOffered": {
+              "@type": "Service",
+              "@id": "https://neiroforyou.ru/agents/instagram/#service",
+              "name": "AI-агент для Instagram",
+              "description": "Отвечает на комментарии и в директ, отправляет материалы по кодовым словам и использует базу знаний твоего бизнеса.",
+              "url": "https://neiroforyou.ru/agents/instagram/",
+              "provider": {
+                "@id": "https://neiroforyou.ru/#organization"
+              },
+              "areaServed": "RU",
+              "inLanguage": "ru-RU"
+            }
+          },
+          {
+            "@type": "Offer",
+            "url": "https://neiroforyou.ru/agents/threads-radar/",
+            "description": "Создание и настройка под аккаунт. Для работы нужен API-ключ; использование AI оплачивается отдельно от разработки. Условия подключения и дополнительные расходы уточняются перед заказом.",
+            "price": "15000",
+            "priceCurrency": "RUB",
+            "itemOffered": {
+              "@type": "Service",
+              "@id": "https://neiroforyou.ru/agents/threads-radar/#service",
+              "name": "AI-радар для Threads",
+              "description": "Находит обсуждения по твоей теме, анализирует профили и помогает готовить комментарии и собственные публикации.",
+              "url": "https://neiroforyou.ru/agents/threads-radar/",
+              "provider": {
+                "@id": "https://neiroforyou.ru/#organization"
+              },
+              "areaServed": "RU",
+              "inLanguage": "ru-RU"
+            }
+          },
+          {
+            "@type": "Offer",
+            "url": "https://neiroforyou.ru/agents/finance/",
+            "description": "Настройка агента. Использование AI через API оплачивается отдельно.",
+            "price": "15000",
+            "priceCurrency": "RUB",
+            "itemOffered": {
+              "@type": "Service",
+              "@id": "https://neiroforyou.ru/agents/finance/#service",
+              "name": "Финансовый AI-агент",
+              "description": "Принимает доходы и расходы в Telegram и собирает управленческий Excel-отчёт с анализом.",
+              "url": "https://neiroforyou.ru/agents/finance/",
+              "provider": {
+                "@id": "https://neiroforyou.ru/#organization"
+              },
+              "areaServed": "RU",
+              "inLanguage": "ru-RU"
+            }
+          },
+          {
+            "@type": "Offer",
+            "url": "https://neiroforyou.ru/services/sites/",
+            "description": "Стартовая стоимость. Итоговая цена зависит от объёма и функций; домен и хостинг оплачиваются отдельно.",
+            "priceSpecification": {
+              "@type": "PriceSpecification",
+              "minPrice": "25000",
+              "priceCurrency": "RUB",
+              "description": "Стартовая стоимость. Итоговая цена зависит от объёма и функций; домен и хостинг оплачиваются отдельно."
+            },
+            "itemOffered": {
+              "@type": "Service",
+              "@id": "https://neiroforyou.ru/services/sites/#service",
+              "name": "Сайты под ключ",
+              "description": "Лендинги и многостраничные сайты под задачи твоего бизнеса. От 25 000 ₽; итоговая цена согласуется до начала работы.",
+              "url": "https://neiroforyou.ru/services/sites/",
+              "provider": {
+                "@id": "https://neiroforyou.ru/#organization"
+              },
+              "areaServed": "RU",
+              "inLanguage": "ru-RU"
+            }
+          },
+          {
+            "@type": "Offer",
+            "url": "https://neiroforyou.ru/services/ai-video/",
+            "description": "Стоимость за секунду готового ролика. Включены три раунда правок в рамках согласованного задания.",
+            "priceSpecification": {
+              "@type": "UnitPriceSpecification",
+              "price": "500",
+              "priceCurrency": "RUB",
+              "referenceQuantity": {
+                "@type": "QuantitativeValue",
+                "value": 1,
+                "unitCode": "SEC",
+                "unitText": "секунда готового ролика"
+              },
+              "description": "Стоимость за секунду готового ролика. Включены три раунда правок в рамках согласованного задания."
+            },
+            "itemOffered": {
+              "@type": "Service",
+              "@id": "https://neiroforyou.ru/services/ai-video/#service",
+              "name": "AI-видео под ключ",
+              "description": "Сценарий, генерация, монтаж, звук и озвучка в одном заказе. 500 ₽ за секунду готового ролика.",
+              "url": "https://neiroforyou.ru/services/ai-video/",
+              "provider": {
+                "@id": "https://neiroforyou.ru/#organization"
+              },
+              "areaServed": "RU",
+              "inLanguage": "ru-RU"
+            }
+          },
+          {
+            "@type": "Offer",
+            "url": "https://neiroforyou.ru/services/music-app/",
+            "description": "Приложение и 100 композиций. Другое наполнение и iOS рассчитываются отдельно; состав версий согласуется.",
+            "price": "50000",
+            "priceCurrency": "RUB",
+            "itemOffered": {
+              "@type": "Service",
+              "@id": "https://neiroforyou.ru/services/music-app/#service",
+              "name": "Музыкальное приложение для бизнеса",
+              "description": "Приложение и 100 композиций под твой проект: с вокалом или инструментальные, на выбранном языке и в выбранном стиле.",
+              "url": "https://neiroforyou.ru/services/music-app/",
+              "provider": {
+                "@id": "https://neiroforyou.ru/#organization"
+              },
+              "areaServed": "RU",
+              "inLanguage": "ru-RU"
+            }
+          },
+          {
+            "@type": "Offer",
+            "url": "https://neiroforyou.ru/agents/custom/",
+            "description": "Стоимость после оценки.",
+            "itemOffered": {
+              "@type": "Service",
+              "@id": "https://neiroforyou.ru/agents/custom/#service",
+              "name": "Автоматизация под твою задачу",
+              "description": "Заявки, отчёты, документы, переписка и внутренняя рутина. Разберу процесс и предложу решение: AI-агента, бота или простую автоматизацию.",
+              "url": "https://neiroforyou.ru/agents/custom/",
+              "provider": {
+                "@id": "https://neiroforyou.ru/#organization"
+              },
+              "areaServed": "RU",
+              "inLanguage": "ru-RU"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
+    </script>
+      <link rel="stylesheet" href="/assets/site-motion.css?v=4">
+      <link rel="stylesheet" href="/assets/fonts/inter.css?v=20261014">
+  <link rel="stylesheet" href="/assets/site-enhancements.css?v=1">
+</head>
+  <body>
+    <main class="page">
+      <nav class="site-nav" aria-label="Главная навигация">
+        <a class="brand" href="#home" aria-label="Перейти к началу страницы">
+          <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true">
+            <rect x="11" y="7" width="5" height="26" rx="2.5" transform="rotate(-35 13.5 20)" fill="#050505"></rect>
+            <rect x="23" y="7" width="5" height="26" rx="2.5" transform="rotate(-35 25.5 20)" fill="#050505"></rect>
+          </svg>
+          <span class="brand-text">NeiroForYou</span>
+        </a>
+      </nav>
+
+      <section class="hero" id="home" aria-labelledby="home-title">
+        <div class="hero-media">
+          <video
+            aria-label="AI-агент для бизнеса"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="auto"
+            poster="media/hero-hand-poster.jpg"
+            src="media/hero-hand.mp4"
+          ></video>
+        </div>
+        <div class="video-bottom-blur" aria-hidden="true"></div>
+        <div class="hero-fade" aria-hidden="true"></div>
+
+        <div class="hero-content">
+          <div class="hero-copy">
+            <h1 id="home-title">AI-агенты, боты<br>и приложения<br>под задачи бизнеса.</h1>
+            <p class="hero-lead">Находить клиентские запросы, вести контент, отвечать клиентам и готовить отчёты. Собираю под твои процессы.</p>
+            <p class="hero-choice">Посмотри готовые решения или расскажи о своей задаче</p>
+
+            <div class="audience-row">
+              <a class="audience-card" href="#business" data-metrika-goal="select_business" aria-label="Посмотреть, какие задачи можно автоматизировать">
+                <span>Что можно автоматизировать</span>
+
+              </a>
+              <a class="audience-card" href="#solutions" data-metrika-goal="select_solutions" aria-label="Посмотреть витрину решений">
+                <span>Посмотреть решения</span>
+
+              </a>
+              <a class="audience-card" href="https://t.me/dejavy30" data-metrika-goal="click_telegram" target="_blank" rel="noopener noreferrer" aria-label="Обсудить задачу в Telegram">
+                <span>Обсудить задачу</span>
+
+              </a>
+            </div>
+          </div>
+
+          <div class="hero-side">
+            <div class="social-links" aria-label="Социальные ссылки">
+
+              <a class="social-link" href="tel:+79872444010" data-metrika-goal="click_phone" aria-label="Позвонить Ларисе по телефону">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7.4 4.8 9.7 4a1.4 1.4 0 0 1 1.7.8l1 2.5a1.4 1.4 0 0 1-.4 1.6l-1.1 1a10.2 10.2 0 0 0 4.2 4.2l1-1.1a1.4 1.4 0 0 1 1.6-.4l2.5 1a1.4 1.4 0 0 1 .8 1.7l-.8 2.3a2.2 2.2 0 0 1-2.2 1.5A14.2 14.2 0 0 1 4 6.9a2.2 2.2 0 0 1 1.5-2.1Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+                Позвонить
+              </a>
+              <a
+                class="social-link"
+                href="https://t.me/dejavy30"
+                data-metrika-goal="click_telegram"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Написать Ларисе в Telegram"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M21 4 3.8 11.2c-.9.4-.9 1.7.1 2l4.1 1.3 1.6 4.6c.3.9 1.5 1 2 .2l2.2-2.8 4.3 3.2c.7.5 1.7.1 1.9-.8L22 5.2c.2-.9-.4-1.5-1-1.2Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+                Написать в Telegram
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-section business-section" id="business" aria-labelledby="business-title">
+        <div class="business-background">
+          <video aria-label="Финансовый учёт с AI-агентом" autoplay muted loop playsinline preload="auto" poster="media/numbers-poster.jpg" src="media/numbers.mp4"></video>
+          <img class="business-background-poster" src="media/numbers-poster.jpg" alt="Финансовый учёт с AI-агентом" loading="lazy" decoding="async">
+        </div>
+
+        <div class="section-inner">
+          <header class="section-head">
+            <p class="section-kicker">ЧТО МОЖНО АВТОМАТИЗИРОВАТЬ</p>
+            <h2 class="section-title" id="business-title">Какие задачи можно передать ИИ?</h2>
+            <p class="section-lead">Выбери, что отнимает время в твоём бизнесе.<br>Я подберу решение под твои процессы.</p>
+          </header>
+
+          <div class="feature-grid automation-grid">
+            <article class="feature-card">
+              <h3>Поиск и сбор лидов</h3>
+              <p>Находит в Telegram запросы на твои услуги. Собирает подходящие обращения в таблицу или отправляет в бота.</p>
+            </article>
+            <article class="feature-card">
+              <h3>Ведение соцсетей</h3>
+              <p>Готовит и публикует посты в Threads. Отвечает на комментарии и в директ Instagram по заданным правилам.</p>
+            </article>
+            <article class="feature-card">
+              <h3>Ответы клиентам</h3>
+              <p>AI-ассистент отвечает по материалам бизнеса и принимает голосовые. В бота можно добавить говорящего аватара.</p>
+            </article>
+            <article class="feature-card">
+              <h3>Финансовые отчёты</h3>
+              <p>Принимает доходы и расходы в Telegram. Собирает управленческий отчёт с анализом.</p>
+            </article>
+          </div>
+
+          <div class="automation-contact">
+            <p class="section-lead">Другая задача? Обсудим, что можно сделать</p>
+            <a class="audience-card" href="https://t.me/dejavy30" data-metrika-goal="click_telegram" target="_blank" rel="noopener noreferrer">
+              <span>ОБСУДИТЬ ЗАДАЧУ</span>
+
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-section leads-section" id="leads" aria-labelledby="leads-title">
+        <div class="section-inner leads-layout">
+          <div class="leads-copy">
+            <header class="section-head">
+              <p class="section-kicker">AI-АГЕНТ ПО ПОИСКУ И СБОРУ ЛИДОВ</p>
+              <h2 class="section-title" id="leads-title">Запросы клиентов.<br>Уже собраны для тебя.</h2>
+              <p class="section-lead">Агент находит подходящие сообщения в выбранных Telegram-сообществах и присылает карточку с запросом, анализом и ссылкой на источник.</p>
+            </header>
+            <ol class="steps">
+              <li>Настраиваем критерии поиска.</li>
+              <li>Агент отбирает подходящие запросы.</li>
+              <li>Ты получаешь карточки в Telegram или таблице.</li>
+            </ol>
+            <p class="leads-price">25 000 ₽</p>
+            <p class="leads-demo-note">Запроси демо и попробуй агента перед заказом.</p>
+            <div class="leads-actions">
+              <a class="section-telegram" href="https://t.me/dejavy30" data-metrika-goal="request_leads_demo" target="_blank" rel="noopener noreferrer">Запросить демо</a>
+              <a class="hero-phone" href="https://t.me/dejavy30" data-metrika-goal="click_telegram" target="_blank" rel="noopener noreferrer">Обсудить задачу</a>
+            </div>
+          </div>
+
+          <!-- lead-result:start -->
+          <figure class="leads-example">
+            <div class="telegram-result">
+              <header class="telegram-result-header">
+
+                <div>
+                  <h3>AI-агент · пример результата</h3>
+                  <p>Пример результата · оформление адаптировано</p>
+                </div>
+              </header>
+              <article class="telegram-result-message">
+                <h4>ЗАПРОС НА ПОКУПКУ КВАРТИРЫ</h4>
+                <div class="telegram-result-part">
+                  <p class="telegram-result-label">Запрос</p>
+                  <p>Покупка квартиры в новостройке с рассрочкой.</p>
+                  <p>Город: Москва, метро Динамо</p>
+                  <p>Условия: первый взнос 30%, рассрочка на 3 года</p>
+                  <p>Бюджет: от 14,7 млн ₽ по контексту переписки</p>
+                </div>
+                <p class="telegram-result-status">Требует уточнения</p>
+                <div class="telegram-result-part">
+                  <p class="telegram-result-label">Фрагмент сообщения</p>
+                  <blockquote>Мне как раз рассрочка интересна, ПВ 30% и на 3 года, норм вариант, чтобы зафиксировать цену сейчас.</blockquote>
+                </div>
+                <div class="telegram-result-part">
+                  <p class="telegram-result-label">Почему агент отобрал запрос</p>
+                  <p>Автор выразил личный интерес к покупке и указал условия оплаты.</p>
+                </div>
+                <div class="telegram-result-part">
+                  <p class="telegram-result-label">Что уточнить</p>
+                  <p>Площадь, количество комнат и источник первого взноса.</p>
+                </div>
+                <div class="telegram-result-controls" aria-label="Пример кнопок рабочего бота">
+                  <span>Открыть источник</span>
+                  <span>Открыть сообщение</span>
+                </div>
+                <p class="telegram-result-footnote">В рабочем боте кнопки ведут к исходному сообщению.</p>
+              </article>
+            </div>
+            <figcaption>Сокращённый пример из работы агента. Оформление адаптировано, данные автора скрыты.</figcaption>
+          </figure>
+          <!-- lead-result:end -->
+        </div>
+      </section>
+
+      <section class="content-section" id="solutions" aria-labelledby="solutions-title">
+        <div class="section-inner">
+          <header class="section-head">
+            <p class="section-kicker">ВИТРИНА РЕШЕНИЙ</p>
+            <h2 class="section-title" id="solutions-title">Выбери решение под свою задачу</h2>
+          </header>
+          <div class="solutions-group" aria-labelledby="solutions-group-0">
+            <h3 class="solutions-group-title" id="solutions-group-0">Клиенты и общение</h3>
+            <div class="feature-grid solutions-grid">
+              <article class="feature-card feature-card-clickable">
+                <h4>AI-агент по поиску и сбору лидов</h4>
+                <p>Находит запросы в Telegram. Передаёт карточки со ссылками в таблицу или бота.</p>
+                <div class="solution-footer">
+                  <p class="solution-price"><span>25 000 ₽</span></p>
+                  <a class="solution-cta" href="/agents/telegram-demand/" data-metrika-goal="select_telegram_demand" aria-label="Подробнее: AI-агент по поиску и сбору лидов">Подробнее</a>
+                </div>
+              </article>
+              <article class="feature-card feature-card-clickable">
+                <h4>Telegram-бот с AI-ассистентом</h4>
+                <p>Отвечает по базе знаний, принимает голосовые сообщения. Включает говорящего аватара. Примеры: обучение и мероприятия.</p>
+                <div class="solution-footer">
+                  <p class="solution-price"><span>35 000 ₽</span></p>
+                  <a class="solution-cta" href="/services/ai-assistant-bot/" data-metrika-goal="select_ai_assistant_bot" aria-label="Подробнее: Telegram-бот с AI-ассистентом">Подробнее</a>
+                </div>
+              </article>
+              <article class="feature-card feature-card-clickable">
+                <h4>Telegram-бот по сценарию</h4>
+                <p>Меню, заявки и готовые ответы по заданному сценарию. Без AI-ассистента и аватара.</p>
+                <div class="solution-footer">
+                  <p class="solution-price"><span>15 000 ₽</span></p>
+                  <p class="solution-detail">Базовый вариант. Дополнительные функции: отдельный расчёт.</p>
+                  <a class="solution-cta" href="/services/telegram-bot/" data-metrika-goal="select_telegram_bot" aria-label="Подробнее: Telegram-бот по сценарию">Подробнее</a>
+                </div>
+              </article>
+            </div>
+          </div>
+          <div class="solutions-group" aria-labelledby="solutions-group-1">
+            <h3 class="solutions-group-title" id="solutions-group-1">Контент и соцсети</h3>
+            <div class="feature-grid solutions-grid">
+              <article id="social-agents" class="feature-card feature-card-clickable">
+                <h4>AI-агент для Threads</h4>
+                <p>Готовит и публикует посты. Ответы на комментарии подключаются отдельно.</p>
+                <div class="solution-footer">
+                  <p class="solution-price"><span>15 000 ₽</span></p>
+                  <a class="solution-cta" href="/agents/threads/" data-metrika-goal="select_threads_agent" aria-label="Подробнее: AI-агент для Threads">Подробнее</a>
+                </div>
+              </article>
+              <article class="feature-card feature-card-clickable">
+                <h4>AI-агент для Instagram</h4>
+                <p>Отвечает на комментарии и в директ по базе знаний. По кодовым словам отправляет гайды и материалы.</p>
+                <div class="solution-footer">
+                  <p class="solution-price"><span>15 000 ₽</span></p>
+                  <a class="solution-cta" href="/agents/instagram/" data-metrika-goal="select_instagram_agent" aria-label="Подробнее: AI-агент для Instagram">Подробнее</a>
+                </div>
+              </article>
+              <article class="feature-card feature-card-clickable">
+                <h4>AI-радар для Threads</h4>
+                <p>Находит обсуждения по твоей теме и помогает выбирать, где включиться в разговор.</p>
+                <div class="solution-footer">
+                  <p class="solution-price"><span>15 000 ₽</span></p>
+                  <a class="solution-cta" href="/agents/threads-radar/" data-metrika-goal="select_threads_radar" aria-label="Подробнее: AI-радар для Threads">Подробнее</a>
+                </div>
+              </article>
+            </div>
+          </div>
+          <div class="solutions-group" aria-labelledby="solutions-group-2">
+            <h3 class="solutions-group-title" id="solutions-group-2">Учёт и управление</h3>
+            <div class="feature-grid solutions-grid solutions-management-grid">
+              <article class="feature-card feature-card-clickable">
+                <h4>Финансовый AI-агент</h4>
+                <p>Собирает доходы и расходы. Готовит управленческие отчёты с анализом.</p>
+                <div class="solution-footer">
+                  <p class="solution-price"><span>15 000 ₽</span></p>
+                  <a class="solution-cta" href="/agents/finance/" data-metrika-goal="select_finance_agent" aria-label="Подробнее: Финансовый AI-агент">Подробнее</a>
+                </div>
+              </article>
+              <article class="feature-card custom-solution">
+                <h4>Автоматизация под твою задачу</h4>
+                <p>Не нашёл подходящего решения? Расскажи, что делаешь вручную и какой результат нужен.</p>
+                <div class="solution-footer">
+                  <p class="solution-price"><span>Стоимость после оценки</span></p>
+                  <a class="solution-cta custom-solution-cta" href="https://t.me/dejavy30" data-metrika-goal="select_custom_task" target="_blank" rel="noopener noreferrer" aria-label="Описать задачу в Telegram">Описать задачу</a>
+                </div>
+              </article>
+            </div>
+          </div>
+          <div class="solutions-group" aria-labelledby="solutions-group-3">
+            <h3 class="solutions-group-title" id="solutions-group-3">Сайты и медиа</h3>
+            <div class="feature-grid solutions-grid">
+              <article class="feature-card feature-card-clickable">
+                <h4>Сайты под ключ</h4>
+                <p>Структура, тексты, дизайн и адаптация под телефон.</p>
+                <div class="solution-footer">
+                  <p class="solution-price"><span>от 25 000 ₽</span></p>
+                  <a class="solution-cta" href="/services/sites/" data-metrika-goal="select_sites" aria-label="Подробнее: Сайты под ключ">Подробнее</a>
+                </div>
+              </article>
+              <article class="feature-card feature-card-clickable">
+                <h4>AI-видео под ключ</h4>
+                <p>Сценарий, генерация, озвучка и монтаж.</p>
+                <div class="solution-footer">
+                  <p class="solution-price"><span>500 ₽ / сек</span></p>
+                  <a class="solution-cta" href="/services/ai-video/" data-metrika-goal="select_ai_video" aria-label="Подробнее: AI-видео под ключ">Подробнее</a>
+                </div>
+              </article>
+              <article class="feature-card feature-card-clickable">
+                <h4>Музыкальное приложение для бизнеса</h4>
+                <p>Приложение и 100 композиций под твой проект.</p>
+                <div class="solution-footer">
+                  <p class="solution-price"><span>50 000 ₽</span></p>
+                  <p class="solution-detail">Стоимость меняется в зависимости от количества песен, музыкального стиля и наполнения. Приложение без музыки или с твоими треками рассчитывается отдельно.</p>
+                  <a class="solution-cta" href="/services/music-app/" data-metrika-goal="select_music_app" aria-label="Подробнее: Музыкальное приложение для бизнеса">Подробнее</a>
+                </div>
+              </article>
+            </div>
+          </div>
+          <div class="solutions-contact">
+            <p class="solution-detail">Для AI-агентов, кроме Instagram-агента, нужен API-ключ выбранного AI-сервиса. Использование модели оплачивается отдельно от разработки. Условия эксплуатации согласуем перед заказом.</p>
+            <p class="section-lead">Расскажи, что хочешь автоматизировать.</p>
+            <a class="section-telegram" href="https://t.me/dejavy30" data-metrika-goal="click_telegram" target="_blank" rel="noopener noreferrer">Обсудить задачу</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-section" id="how-to-order" aria-labelledby="order-title">
+        <div class="section-inner">
+          <header class="section-head"><h2 class="section-title" id="order-title">От задачи до готового проекта</h2><p class="section-lead">Сначала согласуем условия. Затем создаём, проверяем и передаём решение.</p></header>
+          <div class="order-list">
+<details class="order-step"><summary><span class="order-number">01</span><span><strong>Обсуждаем задачу</strong><small>Функции, стоимость, сроки и поддержка.</small></span><span class="order-sign" aria-hidden="true"></span></summary><div class="order-body"><p>До начала работы фиксируем, что должно делать решение и на каких условиях его создаём. Сроки согласуем отдельно для каждого проекта.</p></div></details>
+<details class="order-step"><summary><span class="order-number">02</span><span><strong>Начинаем работу</strong><small>50% предоплаты. Создаю решение под согласованную задачу.</small></span><span class="order-sign" aria-hidden="true"></span></summary><div class="order-body"><p>После согласования условий и предоплаты начинаю разработку.</p></div></details>
+<details class="order-step"><summary><span class="order-number">03</span><span><strong>Проверяем результат</strong><small>Показываю работу. Вместе проверяем согласованные функции.</small></span><span class="order-sign" aria-hidden="true"></span></summary><div class="order-body"><p>Проверяем результат по согласованному заданию и вносим необходимые корректировки.</p></div></details>
+<details class="order-step"><summary><span class="order-number">04</span><span><strong>Передаём проект</strong><small>Оставшиеся 50%: после проверки, перед передачей.</small></span><span class="order-sign" aria-hidden="true"></span></summary><div class="order-body"><p>После оплаты передаю готовый результат, необходимые доступы и инструкцию. Для видео: готовый ролик.</p></div></details>
+          </div>
+          <article class="order-support"><h3>Поддержка под твой проект</h3><p>Срок и состав поддержки согласуем перед заказом. Для некоторых решений срок поддержки составляет до одного-двух месяцев: тестирование и согласованные корректировки.</p></article>
+          <div class="order-actions"><a class="section-telegram" href="https://t.me/dejavy30" target="_blank" rel="noopener noreferrer">Обсудить задачу</a></div>
+        </div>
+      </section>
+
+      <section class="content-section founder-section" id="about" aria-labelledby="about-title">
+        <span id="contact" class="compatible-anchor" aria-hidden="true"></span>
+        <div class="section-inner founder-layout">
+          <div class="founder-portrait"><img src="/media/about/larisa-white.webp" width="1254" height="1254" alt="Лариса Хатченко, основатель NeiroForYou" loading="lazy" decoding="async"></div>
+          <div class="founder-copy">
+            <p class="section-kicker">ОСНОВАТЕЛЬ NEIROFORYOU</p>
+            <h2 class="section-title" id="about-title">Лариса Хатченко</h2>
+            <p class="founder-statement">Семь лет управляла ресторанами.<br>Теперь создаю инструменты для задач, которые раньше решала вручную.</p>
+            <p>Отвечала за три ресторана: бюджеты, план-факт, отчётность и повседневную работу. Этот опыт помогает мне разбираться в задачах бизнеса.</p>
+            <p>Сегодня создаю AI-агентов, ботов и приложения. Начинаю с того, как устроен твой процесс, и подбираю решение под нужный результат.</p>
+            <p class="founder-location">Уфа · Работаю удалённо</p>
+            <a class="section-telegram" href="/#solutions" data-metrika-goal="back_to_showcase">Посмотреть решения</a>
+          </div>
+        </div>
+      </section>
+      <div class="section-inner"><footer class="site-footer legal-footer" aria-label="Сведения об исполнителе и правовая информация">
+  <div class="legal-footer-grid">
+    <section aria-labelledby="executor-title">
+      <h2 id="executor-title">Исполнитель</h2>
+      <p>NeiroForYou</p>
+      <p>Хатченко Лариса Дмитриевна</p>
+      <p>Плательщик налога на профессиональный доход</p>
+      <p>ИНН 027759147558</p>
+      <p>Уфа</p>
+      <p><a href="tel:+79872444010">+7 987 244-40-10</a></p>
+      <p><a href="mailto:dejavy1985@gmail.com">dejavy1985@gmail.com</a></p>
+    </section>
+    <section aria-labelledby="legal-title">
+      <h2 id="legal-title">Правовая информация</h2>
+      <p><a href="/privacy/">Политика обработки персональных данных</a></p>
+      <p><button class="legal-text-button" type="button" data-cookie-settings>Настройки cookies</button></p>
+      <p><a href="/#how-to-order">Условия заказа</a></p>
+      <noscript><p>JavaScript отключён. Аналитика не запускается. Для изменения настроек включи JavaScript.</p></noscript>
+    </section>
+  </div>
+  <p class="legal-disclaimer">Instagram принадлежит компании Meta Platforms Inc., деятельность которой по реализации социальных сетей Facebook и Instagram запрещена в Российской Федерации по основаниям осуществления экстремистской деятельности.</p>
+</footer>
+<dialog class="consent-dialog" aria-labelledby="consent-title" data-consent-dialog>
+  <form method="dialog" data-consent-form>
+    <h2 id="consent-title">Настройки cookies</h2>
+    <p>Техническое хранение сохраняет твой выбор. Аналитика Яндекс.Метрики помогает понять, как пользуются сайтом.</p>
+    <p data-consent-status></p>
+    <label class="consent-choice"><input type="checkbox" name="analytics"> Разрешить аналитику Яндекс.Метрики</label>
+    <p>Отключение прекращает новую отправку аналитики, но не удаляет сведения, уже переданные Яндексу.</p>
+    <div class="consent-dialog-actions">
+      <button class="page-cta" type="submit" value="save" data-consent-save>Сохранить</button>
+      <button class="page-cta-secondary" type="button" data-consent-close>Закрыть без сохранения</button>
+    </div>
+  </form>
+</dialog>
+</div>
+    </main>
+    <div class="cookie-banner" data-cookie-banner hidden role="dialog" aria-live="polite" aria-label="Согласие на cookies">
+      <p>
+        Мы используем cookies, чтобы понимать, как посетители пользуются сайтом.
+        Подробнее: в <a href="/privacy/">политике конфиденциальности</a>.
+      </p>
+      <div class="cookie-actions">
+        <button class="cookie-accept" type="button" data-cookie-accept>Принять</button>
+        <button class="cookie-decline" type="button" data-cookie-decline>Отклонить</button>
+      </div>
+    </div>
+    <script>
+      (() => {
+        const lazyVideos = Array.from(document.querySelectorAll("[data-lazy-video]"));
+        if (!lazyVideos.length) return;
+
+        const loadVideo = (video) => {
+          if (video.dataset.lazyLoaded) return;
+          video.dataset.lazyLoaded = "1";
+
+          if (video.dataset.src) {
+            video.src = video.dataset.src;
+          }
+          video.querySelectorAll("source[data-src]").forEach((source) => {
+            source.src = source.dataset.src;
+          });
+
+          const tryPlay = () => {
+            try {
+              video.muted = true;
+              video.playsInline = true;
+              const playPromise = video.play();
+              if (playPromise && typeof playPromise.catch === "function") {
+                playPromise.catch(() => {});
+              }
+            } catch (error) {}
+          };
+
+          try {
+            video.load();
+          } catch (error) {}
+
+          // Запускаем не сразу, а когда браузер получил достаточно данных:
+          // ранний вызов play() отклоняется и видео остаётся на паузе.
+          video.addEventListener("canplay", tryPlay, { once: true });
+          video.addEventListener("loadeddata", tryPlay, { once: true });
+          tryPlay();
+        };
+
+        const loadAll = () => lazyVideos.forEach(loadVideo);
+
+        if (!("IntersectionObserver" in window)) {
+          loadAll();
+          return;
+        }
+
+        // Следим за секцией, а не за самим видео: видео лежит внутри
+        // контейнера с overflow: hidden, и наблюдение за ним ненадёжно.
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              const video = entry.target.querySelector("[data-lazy-video]");
+              if (video) loadVideo(video);
+              observer.unobserve(entry.target);
+              if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            });
+          },
+          { rootMargin: "600px 0px" }
+        );
+
+        lazyVideos.forEach((video) => {
+          const anchor = video.closest("section") || video.parentElement;
+          if (anchor) observer.observe(anchor);
+        });
+
+        // Подстраховка: если наблюдатель почему-то не сработал,
+        // видео всё равно загрузятся при первой прокрутке.
+        window.addEventListener("scroll", loadAll, { once: true, passive: true });
+      })();
+    </script>
+
+    <script>
+      (() => {
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        const videos = Array.from(document.querySelectorAll("video"));
+        const tryPlayVideos = () => {
+          videos.forEach((video) => {
+            try {
+              video.muted = true;
+              video.playsInline = true;
+              const playPromise = video.play();
+              if (playPromise && typeof playPromise.catch === "function") {
+                playPromise.catch(() => {});
+              }
+            } catch (error) {}
+          });
+        };
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", tryPlayVideos, { once: true });
+        } else {
+          tryPlayVideos();
+        }
+
+        window.addEventListener("load", tryPlayVideos, { once: true });
+        window.addEventListener("touchstart", tryPlayVideos, { once: true, passive: true });
+        window.addEventListener("pointerdown", tryPlayVideos, { once: true });
+        window.addEventListener("click", tryPlayVideos, { once: true });
+
+        const revealTargets = Array.from(document.querySelectorAll(".content-section .section-head, #solutions .solutions-group-title, .feature-card, .process-panel, .agent-chat, .fit-card, .about-card, .price-card, .price-note, .final-band, #how-to-order .order-list, #how-to-order .order-support, #how-to-order .order-actions"));
+        if (!reduceMotion && "IntersectionObserver" in window) {
+          const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+              if (!entry.isIntersecting) return;
+              observer.unobserve(entry.target);
+              if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || typeof entry.target.animate !== 'function') return;
+              const siblings = entry.target.parentElement.querySelectorAll(':scope > .feature-card');
+              const column = siblings.length ? Array.from(siblings).filter(item => Math.abs(item.offsetTop - entry.target.offsetTop) < 4).indexOf(entry.target) : 0;
+              entry.target.animate([{opacity:0, transform:'translateY(12px)'},{opacity:1, transform:'translateY(0)'}], {duration:400, delay:Math.min(Math.max(column,0)*60,240), easing:'ease-out', fill:'backwards'});
+            });
+          }, {threshold:0, rootMargin:'0px 0px -4% 0px'});
+          revealTargets.forEach(item => observer.observe(item));
+        }
+
+      })();
+    </script>
+    <script>
+
+    </script>
+    <script>
+      (() => {
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+        document.querySelectorAll('.order-step').forEach(detail => {
+          const summary = detail.querySelector('summary');
+          let animation;
+          summary.addEventListener('click', event => {
+            if (reduced.matches || !detail.animate) return;
+            event.preventDefault();
+            if (animation) animation.cancel();
+            const closing = detail.open;
+            const from = detail.getBoundingClientRect().height;
+            if (!closing) detail.open = true;
+            const to = closing ? summary.getBoundingClientRect().height + 2 : detail.getBoundingClientRect().height;
+            detail.style.overflow = 'hidden';
+            animation = detail.animate([{height:from+'px'},{height:to+'px'}], {duration:250,easing:'ease-in-out'});
+            const clear = () => { detail.style.overflow = ''; animation = null; };
+            animation.onfinish = () => { if (closing) detail.open = false; clear(); };
+            animation.oncancel = clear;
+          });
+        });
+      })();
+    </script>
+    <script src="/assets/audio/voice.js?v=5" defer></script>
+    <script src="/assets/haptics/haptics.js?v=3" defer></script>
+      <script src="/assets/site-motion.js?v=4" defer></script>
+  <script src="/assets/site-consent.js?v=1" defer></script>
+</body>
+</html>

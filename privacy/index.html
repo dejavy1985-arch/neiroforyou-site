@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=yes">
+    <title>Политика конфиденциальности · NeiroForYou</title>
+    <meta name="description" content="Политика конфиденциальности сайта NeiroForYou.">
+    <link rel="canonical" href="https://neiroforyou.ru/privacy/">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+
+
+    <style>
+      :root {
+        --white: #ffffff;
+        --black: #050505;
+        --ink: rgba(0, 0, 0, 0.88);
+        --muted: rgba(0, 0, 0, 0.58);
+        --line: rgba(0, 0, 0, 0.12);
+        --line-strong: rgba(0, 0, 0, 0.28);
+        --radius: 28px;
+        --cookie-offset: 0px;
+        font-family: "Inter", Arial, sans-serif;
+        color: var(--black);
+        background: var(--white);
+      }
+
+      html.cookie-banner-visible {
+        --cookie-offset: 136px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+        margin: 0;
+        background: var(--white);
+      }
+
+      body {
+        padding-bottom: var(--cookie-offset);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .site-nav {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: calc(16px + env(safe-area-inset-top)) 16px 16px;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.82));
+        -webkit-backdrop-filter: blur(14px);
+        backdrop-filter: blur(14px);
+      }
+
+      .brand,
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .brand {
+        gap: 10px;
+        min-width: 0;
+      }
+
+      .brand-mark {
+        width: 34px;
+        height: 34px;
+        flex: 0 0 auto;
+      }
+
+      .brand-text {
+        color: var(--black);
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1;
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+      }
+
+      .back-link {
+        min-height: 38px;
+        padding: 0 16px;
+        border: 1px solid var(--line-strong);
+        border-radius: 999px;
+        color: var(--black);
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .privacy-page {
+        width: min(920px, 100%);
+        margin: 0 auto;
+        padding: 68px 16px 44px;
+      }
+
+      .privacy-kicker {
+        margin: 0 0 18px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.2;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0 0 30px;
+        color: var(--black);
+        font-size: clamp(34px, 7vw, 64px);
+        font-weight: 300;
+        line-height: 0.98;
+        letter-spacing: -0.04em;
+      }
+
+      .privacy-card {
+        display: grid;
+        gap: 22px;
+        padding: 22px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.025);
+      }
+
+      .privacy-card h2 {
+        margin: 14px 0 0;
+        color: var(--black);
+        font-size: clamp(22px, 4vw, 32px);
+        font-weight: 300;
+        line-height: 1.02;
+        letter-spacing: -0.04em;
+      }
+
+      .privacy-card h2:first-child {
+        margin-top: 0;
+      }
+
+      .privacy-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.55;
+      }
+
+      .privacy-card ul {
+        display: grid;
+        gap: 8px;
+        margin: -10px 0 0;
+        padding: 0 0 0 18px;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.55;
+      }
+
+      .privacy-card a {
+        color: var(--black);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        text-decoration-color: var(--line-strong);
+      }
+
+      .privacy-card a:hover {
+        text-decoration-color: var(--black);
+      }
+
+      .privacy-date {
+        margin: 10px 0 0;
+        color: var(--muted);
+        font-size: 15px;
+      }
+
+      .privacy-actions {
+        margin-top: 22px;
+      }
+
+      .primary-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 50px;
+        padding: 0 20px;
+        border: 1px solid var(--black);
+        border-radius: 999px;
+        background: var(--black);
+        color: var(--white);
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .site-footer {
+        width: min(920px, 100%);
+        margin: 28px auto 0;
+        padding: 0 16px 32px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .site-footer p {
+        margin: 0;
+      }
+
+      .cookie-banner {
+        position: fixed;
+        left: 16px;
+        right: 16px;
+        bottom: calc(16px + env(safe-area-inset-bottom));
+        z-index: 100;
+        display: grid;
+        gap: 14px;
+        width: min(620px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.88);
+        color: var(--ink);
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.12);
+        -webkit-backdrop-filter: blur(18px);
+        backdrop-filter: blur(18px);
+      }
+
+      .cookie-banner[hidden] {
+        display: none;
+      }
+
+      .cookie-banner p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .cookie-banner a {
+        color: var(--black);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      .cookie-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .cookie-actions button {
+        min-height: 40px;
+        padding: 0 16px;
+        border-radius: 999px;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .cookie-accept {
+        border: 1px solid var(--black);
+        background: var(--black);
+        color: var(--white);
+      }
+
+      .cookie-decline {
+        border: 1px solid var(--line-strong);
+        background: transparent;
+        color: var(--black);
+      }
+
+      @media (max-width: 767px) {
+        html.cookie-banner-visible {
+          --cookie-offset: 166px;
+        }
+
+        .site-nav {
+          align-items: flex-start;
+        }
+
+        .back-link {
+          padding: 0 12px;
+          font-size: 11px;
+        }
+
+        .privacy-page {
+          padding-top: 48px;
+        }
+
+        .privacy-card {
+          padding: 18px;
+        }
+
+        .cookie-banner {
+          left: 10px;
+          right: 10px;
+          bottom: calc(10px + env(safe-area-inset-bottom));
+          width: calc(100% - 20px);
+          padding: 14px;
+          border-radius: 18px;
+        }
+
+        .cookie-actions {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .cookie-actions button {
+          width: 100%;
+          padding: 0 10px;
+        }
+      }
+    </style>
+      <meta property="og:title" content="Политика конфиденциальности · NeiroForYou">
+      <meta property="og:description" content="Политика конфиденциальности сайта NeiroForYou.">
+      <meta property="og:url" content="https://neiroforyou.ru/privacy/">
+      <meta property="og:image" content="https://neiroforyou.ru/media/og-cover.jpg">
+      <meta property="og:type" content="website">
+      <link rel="stylesheet" href="/assets/fonts/inter.css?v=20261014">
+  <link rel="stylesheet" href="/assets/site-motion.css?v=4">
+<link rel="stylesheet" href="/assets/site-enhancements.css?v=1">
+</head>
+  <body>
+    <nav class="site-nav" aria-label="Навигация">
+      <a class="brand" href="/" aria-label="Вернуться на главную">
+        <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true">
+          <rect x="11" y="7" width="5" height="26" rx="2.5" transform="rotate(-35 13.5 20)" fill="#050505"></rect>
+          <rect x="23" y="7" width="5" height="26" rx="2.5" transform="rotate(-35 25.5 20)" fill="#050505"></rect>
+        </svg>
+        <span class="brand-text">NeiroForYou</span>
+      </a>
+      <a class="back-link" href="/">Вернуться на главную</a>
+    </nav>
+
+    <main class="privacy-page">
+      <p class="privacy-kicker">NeiroForYou</p>
+      <h1>Политика конфиденциальности</h1>
+
+      <p class="privacy-date">Дата публикации: 7 августа 2026 года</p>
+
+      <article class="privacy-card">
+        <h2>1. Общие положения</h2>
+        <p>Настоящая Политика определяет порядок обработки персональных данных посетителей сайта neiroforyou.ru и разработана в соответствии с Федеральным законом от 27.07.2006 № 152-ФЗ «О персональных данных».</p>
+        <p>Оператор: Хатченко Лариса Дмитриевна, плательщик налога на профессиональный доход (самозанятая), ИНН 027759147558, г. Уфа.<br>Контакт для обращений: <a href="mailto:dejavy1985@gmail.com">dejavy1985@gmail.com</a></p>
+        <p>Используя сайт, вы соглашаетесь с условиями настоящей Политики. Если вы не согласны: прекратите использование сайта.</p>
+
+        <h2>2. Какие данные собираются</h2>
+        <p>На сайте нет форм регистрации, заказа или подписки. Оператор не запрашивает и не хранит имена, телефоны, адреса и иные данные, которые вы вводите вручную.</p>
+        <p>Собираются только обезличенные технические данные через систему веб-аналитики Яндекс.Метрика:</p>
+        <ul>
+          <li>IP-адрес;</li>
+          <li>тип и версия браузера, операционная система;</li>
+          <li>тип устройства и разрешение экрана;</li>
+          <li>источник перехода на сайт;</li>
+          <li>просмотренные страницы, время и длительность посещения;</li>
+          <li>файлы cookie.</li>
+        </ul>
+        <p>Эти данные не позволяют идентифицировать вас как конкретное лицо.</p>
+        <p>Если вы напишете в Telegram или позвоните по номеру, указанному на сайте, обработка вашего обращения происходит в соответствующем мессенджере или через оператора связи и регулируется их собственными политиками.</p>
+
+        <h2>3. Цели обработки</h2>
+        <p>Технические данные обрабатываются для:</p>
+        <ul>
+          <li>оценки посещаемости сайта и его отдельных разделов;</li>
+          <li>понимания, какие материалы полезны посетителям;</li>
+          <li>улучшения структуры и содержания сайта.</li>
+        </ul>
+        <p>Данные не используются для принятия решений в отношении конкретных лиц и не передаются в рекламные сети для показа персонализированной рекламы.</p>
+
+        <h2>4. Файлы cookie</h2>
+        <p>Cookie: небольшие файлы, которые сохраняются в вашем браузере. Сайт использует:</p>
+        <ul>
+          <li>технические cookie, необходимые для работы сайта и сохранения вашего выбора в баннере согласия;</li>
+          <li>аналитические cookie Яндекс.Метрики.</li>
+        </ul>
+        <p>Яндекс.Метрика запускается только после разрешения аналитики в баннере или в «Настройках cookies». Текущий выбор можно посмотреть и изменить через подвал любой страницы. До согласия и после отказа аналитика не запускается.</p>
+        <p>Для отзыва согласия откройте «Настройки cookies», отключите аналитику и сохраните выбор. Если Метрика уже работала, страница перезагрузится без её запуска. Закрытие окна без сохранения не изменяет выбор. Отключение не удаляет сведения, ранее переданные Яндексу. Также можно управлять cookie в настройках браузера.</p>
+
+        <h2>5. Передача данных третьим лицам</h2>
+        <p>Обезличенные данные о посещениях обрабатываются сервисом Яндекс.Метрика (ООО «Яндекс»). Условия обработки: в политике Яндекса: <a href="https://yandex.ru/legal/confidential/" target="_blank" rel="noopener">yandex.ru/legal/confidential</a></p>
+        <p>Оператор не передаёт данные иным третьим лицам, за исключением случаев, прямо предусмотренных законодательством Российской Федерации.</p>
+
+        <h2>6. Хранение и защита</h2>
+        <p>Данные веб-аналитики хранятся в сервисе Яндекс.Метрика в сроки, установленные этим сервисом. Оператор не ведёт собственных баз персональных данных.</p>
+        <p>Оператор принимает разумные меры для защиты информации от неправомерного доступа, изменения и распространения.</p>
+
+        <h2>7. Ваши права</h2>
+        <p>Вы вправе:</p>
+        <ul>
+          <li>отозвать согласие на аналитику через «Настройки cookies» в подвале сайта;</li>
+          <li>запросить информацию об обработке ваших данных;</li>
+          <li>потребовать уточнения, блокирования или удаления данных, если они неполны, устарели или неправомерно обрабатываются.</li>
+        </ul>
+        <p>Обращения направляйте на <a href="mailto:dejavy1985@gmail.com">dejavy1985@gmail.com</a>. Ответ будет дан в срок, установленный законодательством.</p>
+
+        <h2>8. Обработка данных в приложении Mamavdele AI bot (Threads)</h2>
+        <p>Оператор использует собственное приложение «Mamavdele AI bot», подключённое к Threads API компании Meta, для ведения профессионального блога в социальной сети Threads.</p>
+        <p><strong>Кто пользуется приложением.</strong> Приложением пользуется только сам Оператор для собственного аккаунта @mamavdele.ai. Приложение не предоставляется третьим лицам, не является сервисом для других пользователей и не имеет функции регистрации.</p>
+        <p><strong>Какие данные обрабатываются.</strong> Приложение получает через официальный Threads API:</p>
+        <ul>
+          <li>публикации Оператора и их статистику;</li>
+          <li>публичные комментарии к публикациям Оператора: текст комментария, имя пользователя автора, дату публикации, ссылку на комментарий;</li>
+          <li>публичные публикации других пользователей, найденные по ключевым словам профессиональной тематики, и их тексты;</li>
+          <li>обезличенную статистику: количество просмотров, отметок «нравится» и ответов.</li>
+        </ul>
+        <p>Приложение не запрашивает и не получает адреса электронной почты, телефоны, данные о местоположении, списки контактов, личные сообщения и любые непубличные данные пользователей Threads.</p>
+        <p><strong>Цели обработки.</strong> Данные используются исключительно для того, чтобы Оператор мог отвечать на комментарии и участвовать в профессиональных обсуждениях по своей теме: искусственный интеллект, автоматизация и ведение малого бизнеса.</p>
+        <p><strong>Передача третьим лицам.</strong> Тексты публичных публикаций и комментариев передаются в сервис Anthropic (Claude) для подготовки черновика ответа. Передаётся только текст публикации и текст комментария. Имена пользователей, идентификаторы и любые иные данные в этот сервис не передаются. Политика Anthropic: <a href="https://www.anthropic.com/legal/privacy" target="_blank" rel="noopener">anthropic.com/legal/privacy</a></p>
+        <p>Иным третьим лицам данные не передаются, не продаются и не используются для рекламы или профилирования.</p>
+        <p><strong>Хранение.</strong> Данные хранятся локально на оборудовании Оператора не дольше 30 дней и используются только для того, чтобы не отвечать дважды на один и тот же комментарий. По истечении срока данные удаляются автоматически. Резервные копии не создаются.</p>
+        <p><strong>Права пользователей Threads.</strong> Любой пользователь Threads вправе потребовать удалить относящиеся к нему данные из хранилища приложения, обратившись по контактам, указанным в настоящей Политике. Требование исполняется в течение трёх рабочих дней. Также пользователь может в любой момент удалить свой комментарий в Threads: после этого он перестаёт обрабатываться приложением.</p>
+        <p><strong>Автоматизация.</strong> Ответы готовятся с использованием языковой модели и публикуются от имени Оператора. Оператор несёт полную ответственность за содержание опубликованных ответов. Приложение не рассылает сообщения, не добавляет подписчиков, не совершает массовых действий и соблюдает ограничения, установленные Meta.</p>
+
+        <h2>9. Изменения Политики</h2>
+        <p>Оператор вправе изменять настоящую Политику. Новая редакция вступает в силу с момента размещения на этой странице. Дата актуальной редакции указана вверху документа.</p>
+      </article>
+
+      <div class="privacy-actions">
+        <a class="primary-link" href="/">Вернуться на главную</a>
+      </div>
+    </main>
+
+    <footer class="site-footer legal-footer" aria-label="Сведения об исполнителе и правовая информация">
+  <div class="legal-footer-grid">
+    <section aria-labelledby="executor-title">
+      <h2 id="executor-title">Исполнитель</h2>
+      <p>NeiroForYou</p>
+      <p>Хатченко Лариса Дмитриевна</p>
+      <p>Плательщик налога на профессиональный доход</p>
+      <p>ИНН 027759147558</p>
+      <p>Уфа</p>
+      <p><a href="tel:+79872444010">+7 987 244-40-10</a></p>
+      <p><a href="mailto:dejavy1985@gmail.com">dejavy1985@gmail.com</a></p>
+    </section>
+    <section aria-labelledby="legal-title">
+      <h2 id="legal-title">Правовая информация</h2>
+      <p><a href="/privacy/">Политика обработки персональных данных</a></p>
+      <p><button class="legal-text-button" type="button" data-cookie-settings>Настройки cookies</button></p>
+      <p><a href="/#how-to-order">Условия заказа</a></p>
+      <noscript><p>JavaScript отключён. Аналитика не запускается. Для изменения настроек включи JavaScript.</p></noscript>
+    </section>
+  </div>
+  <p class="legal-disclaimer">Instagram принадлежит компании Meta Platforms Inc., деятельность которой по реализации социальных сетей Facebook и Instagram запрещена в Российской Федерации по основаниям осуществления экстремистской деятельности.</p>
+</footer>
+<dialog class="consent-dialog" aria-labelledby="consent-title" data-consent-dialog>
+  <form method="dialog" data-consent-form>
+    <h2 id="consent-title">Настройки cookies</h2>
+    <p>Техническое хранение сохраняет твой выбор. Аналитика Яндекс.Метрики помогает понять, как пользуются сайтом.</p>
+    <p data-consent-status></p>
+    <label class="consent-choice"><input type="checkbox" name="analytics"> Разрешить аналитику Яндекс.Метрики</label>
+    <p>Отключение прекращает новую отправку аналитики, но не удаляет сведения, уже переданные Яндексу.</p>
+    <div class="consent-dialog-actions">
+      <button class="page-cta" type="submit" value="save" data-consent-save>Сохранить</button>
+      <button class="page-cta-secondary" type="button" data-consent-close>Закрыть без сохранения</button>
+    </div>
+  </form>
+</dialog>
+
+
+    <div class="cookie-banner" data-cookie-banner hidden role="dialog" aria-live="polite" aria-label="Согласие на cookies">
+      <p>
+        Мы используем cookies, чтобы понимать, как посетители пользуются сайтом.
+        Подробнее: в <a href="/privacy/">политике конфиденциальности</a>.
+      </p>
+      <div class="cookie-actions">
+        <button class="cookie-accept" type="button" data-cookie-accept>Принять</button>
+        <button class="cookie-decline" type="button" data-cookie-decline>Отклонить</button>
+      </div>
+    </div>
+
+    <script>
+
+    </script>
+  <script src="/assets/site-consent.js?v=1" defer></script>
+</body>
+</html>

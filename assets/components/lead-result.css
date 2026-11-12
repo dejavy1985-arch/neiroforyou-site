@@ -1,0 +1,43 @@
+.leads-example { margin: 0; }
+.telegram-result {
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--white);
+}
+.telegram-result-header { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+.telegram-result-header h3 { margin: 0 0 6px; font-size: 22px; font-weight: 500; letter-spacing: -0.035em; }
+.telegram-result-header p,
+.telegram-result-footnote,
+.leads-example figcaption { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+.telegram-result-icon {
+  display: grid; place-items: center; flex: 0 0 42px; height: 42px;
+  border-radius: 50%; background: #159cda; color: #fff; font-size: 24px;
+}
+.telegram-result-message {
+  padding: 22px; border: 1px solid var(--line); border-radius: 22px;
+  background: rgba(0, 0, 0, 0.025); color: var(--ink); font-size: 15px; line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.telegram-result-message h4 { margin: 0 0 18px; font-size: 16px; font-weight: 600; line-height: 1.4; }
+.telegram-result-part { margin-top: 18px; }
+.telegram-result-part p { margin: 0 0 4px; }
+.telegram-result-label { color: var(--muted); }
+.telegram-result-status {
+  display: inline-block; margin: 10px 0 0; padding: 5px 12px;
+  border: 1px solid var(--line); border-radius: 999px; font-size: 13px;
+}
+.telegram-result-part blockquote { margin: 0; padding-left: 14px; border-left: 2px solid var(--line-strong); }
+.telegram-result-controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 20px; }
+.telegram-result-controls span {
+  display: grid; place-items: center; padding: 10px 8px;
+  border: 1px solid rgba(21, 156, 218, 0.3); border-radius: 16px;
+  color: #087cb0; font-size: 13px; text-align: center;
+}
+.telegram-result-message .telegram-result-footnote { margin-top: 12px; }
+.leads-example figcaption { margin-top: 12px; }
+@media (max-width: 767px) {
+  .telegram-result { padding: 16px; }
+  .telegram-result-message { padding: 16px; }
+  .telegram-result-controls { grid-template-columns: minmax(0, 1fr); }
+}

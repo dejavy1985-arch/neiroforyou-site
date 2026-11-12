@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=yes">
+    <title>Telegram-бот по сценарию | NeiroForYou</title>
+    <meta name="description" content="Бот с базовым набором функций: работает по заданным кнопкам, шагам и ответам. Базовый вариант: 15 000 ₽; дополнительные функции рассчитываются отдельно.">
+    <link rel="canonical" href="https://neiroforyou.ru/services/telegram-bot/">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+
+
+    <style>
+      :root {
+        --white: #ffffff;
+        --black: #050505;
+        --ink: rgba(0, 0, 0, 0.88);
+        --muted: rgba(0, 0, 0, 0.58);
+        --line: rgba(0, 0, 0, 0.12);
+        --line-strong: rgba(0, 0, 0, 0.28);
+        --radius: 28px;
+        --cookie-offset: 0px;
+        font-family: "Inter", Arial, sans-serif;
+        color: var(--black);
+        background: var(--white);
+      }
+
+      html.cookie-banner-visible {
+        --cookie-offset: 136px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+        margin: 0;
+        background: var(--white);
+        overflow-x: hidden;
+      }
+
+      body {
+        padding-bottom: var(--cookie-offset);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .site-nav {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: calc(16px + env(safe-area-inset-top)) 16px 16px;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.82));
+        -webkit-backdrop-filter: blur(14px);
+        backdrop-filter: blur(14px);
+      }
+
+      .brand,
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .brand {
+        gap: 10px;
+        min-width: 0;
+      }
+
+      .brand-mark {
+        width: 34px;
+        height: 34px;
+        flex: 0 0 auto;
+      }
+
+      .brand-text {
+        color: var(--black);
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1;
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+      }
+
+      .back-link {
+        min-height: 38px;
+        padding: 0 16px;
+        border: 1px solid var(--line-strong);
+        border-radius: 999px;
+        color: var(--black);
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .page-main {
+        width: min(820px, 100%);
+        margin: 0 auto;
+        padding: 68px 16px 44px;
+      }
+
+      .page-kicker {
+        margin: 0 0 18px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.2;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0 0 18px;
+        color: var(--black);
+        font-size: clamp(32px, 6.4vw, 56px);
+        font-weight: 300;
+        line-height: 1;
+        letter-spacing: -0.04em;
+      }
+
+      .page-lead {
+        max-width: 620px;
+        margin: 0 0 16px;
+        color: var(--ink);
+        font-size: clamp(16px, 3.4vw, 20px);
+        font-weight: 400;
+        line-height: 1.3;
+        letter-spacing: -0.02em;
+      }
+
+      .page-description {
+        max-width: 640px;
+        margin: 0 0 40px;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.55;
+      }
+
+      .page-stack {
+        display: grid;
+        gap: 20px;
+      }
+
+      .process-panel {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.025);
+        padding: 24px;
+      }
+
+      .process-panel h2 {
+        margin: 0 0 14px;
+        color: var(--black);
+        font-size: clamp(20px, 4vw, 28px);
+        font-weight: 400;
+        line-height: 1.05;
+        letter-spacing: -0.035em;
+      }
+
+      .process-panel p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.55;
+      }
+
+      .dash-list {
+        display: grid;
+        gap: 12px;
+        margin: 4px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .dash-list li {
+        position: relative;
+        padding-left: 26px;
+        color: var(--ink);
+        font-size: 16px;
+        line-height: 1.45;
+      }
+
+      .dash-list li::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: var(--black);
+      }
+
+      .steps {
+        display: grid;
+        gap: 14px;
+        margin: 4px 0 0;
+        padding: 0;
+        list-style: none;
+        counter-reset: step;
+      }
+
+      .steps li {
+        display: grid;
+        grid-template-columns: 34px minmax(0, 1fr);
+        gap: 12px;
+        align-items: start;
+        color: var(--ink);
+        font-size: 16px;
+        line-height: 1.45;
+      }
+
+      .steps li::before {
+        counter-increment: step;
+        content: counter(step);
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        color: var(--black);
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .agent-price {
+        display: grid;
+        gap: 10px;
+        margin-top: 22px;
+        padding-top: 20px;
+        border-top: 1px solid var(--line);
+      }
+
+      .agent-price-main {
+        margin: 0;
+        color: var(--black) !important;
+        font-size: 28px !important;
+        font-weight: 600 !important;
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+      }
+
+      .agent-price-main span {
+        font-weight: 500;
+      }
+
+      .page-cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 54px;
+        margin-top: 18px;
+        padding: 0 24px;
+        border: 1px solid var(--black);
+        border-radius: 999px;
+        background: var(--black);
+        color: var(--white);
+        font-size: 14px;
+        font-weight: 600;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
+
+      .agent-price-main + .page-cta {
+        margin-top: 22px;
+      }
+
+      .page-cta:hover {
+        background: #202020;
+      }
+
+      .site-footer {
+        width: min(820px, 100%);
+        margin: 28px auto 0;
+        padding: 0 16px 32px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .site-footer p {
+        margin: 0;
+      }
+
+      .site-footer a {
+        color: inherit;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      .cookie-banner {
+        position: fixed;
+        left: 16px;
+        right: 16px;
+        bottom: calc(16px + env(safe-area-inset-bottom));
+        z-index: 100;
+        display: grid;
+        gap: 14px;
+        width: min(620px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.88);
+        color: var(--ink);
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.12);
+        -webkit-backdrop-filter: blur(18px);
+        backdrop-filter: blur(18px);
+      }
+
+      .cookie-banner[hidden] {
+        display: none;
+      }
+
+      .cookie-banner p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .cookie-banner a {
+        color: var(--black);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      .cookie-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .cookie-actions button {
+        min-height: 40px;
+        padding: 0 16px;
+        border-radius: 999px;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .cookie-accept {
+        border: 1px solid var(--black);
+        background: var(--black);
+        color: var(--white);
+      }
+
+      .cookie-decline {
+        border: 1px solid var(--line-strong);
+        background: transparent;
+        color: var(--black);
+      }
+
+      @media (min-width: 768px) {
+        .agent-price-main {
+          font-size: 32px !important;
+        }
+      }
+
+      @media (max-width: 767px) {
+        html.cookie-banner-visible {
+          --cookie-offset: 166px;
+        }
+
+        .site-nav {
+          align-items: flex-start;
+        }
+
+        .back-link {
+          padding: 0 12px;
+          font-size: 11px;
+        }
+
+        .page-main {
+          padding-top: 48px;
+        }
+
+        .process-panel {
+          padding: 18px;
+        }
+
+        .page-cta {
+          width: 100%;
+        }
+
+        .cookie-banner {
+          left: 10px;
+          right: 10px;
+          bottom: calc(10px + env(safe-area-inset-bottom));
+          width: calc(100% - 20px);
+          padding: 14px;
+          border-radius: 18px;
+        }
+
+        .cookie-actions {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .cookie-actions button {
+          width: 100%;
+          padding: 0 10px;
+        }
+      }
+      .site-nav { flex-wrap: wrap; }
+      .page-cta-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid var(--line-strong); border-radius: 999px; background: transparent; color: var(--black); font-size: 14px; font-weight: 600; cursor: pointer; transition: border-color 0.2s ease, background 0.2s ease; }
+      .page-cta-secondary:hover { border-color: rgba(0, 0, 0, 0.46); }
+      .page-cta, .page-cta-secondary, .back-link { width: min(240px, 100%); height: 48px; min-height: 48px; margin-top: 0; padding: 0 16px; white-space: normal; text-align: center; flex: 0 0 auto; }
+      .scenario-intro { margin-bottom: 40px; }
+      .scenario-intro .page-description { margin-bottom: 24px; }
+      .scenario-caption { margin: 10px 0 0; color: var(--muted); font-size: 16px; line-height: 1.5; }
+      .scenario-price-note, .scenario-note { margin: 12px 0 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+      .scenario-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+      .scenario-section h2, .scenario-compare-card h3 { margin: 0 0 18px; color: var(--black); font-size: clamp(20px, 4vw, 28px); font-weight: 400; line-height: 1.05; letter-spacing: -0.035em; }
+      .scenario-feature-grid, .scenario-comparison { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+      .scenario-feature { display: flex; align-items: center; gap: 14px; min-width: 0; }
+      .scenario-feature h3 { margin: 0; font-size: 16px; font-weight: 400; line-height: 1.4; }
+      .scenario-icon-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+      .scenario-icon { width: 28px; height: 28px; flex: 0 0 28px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+      .scenario-steps li { padding: 18px; border: 1px solid var(--line); border-radius: var(--radius); background: rgba(0, 0, 0, 0.025); }
+      .scenario-compare-card { min-width: 0; }
+      .scenario-compare-card .agent-price-main { margin-bottom: 16px; }
+      .process-panel .scenario-compare-note { margin-top: 16px; font-size: 14px; }
+      .scenario-text-link { display: inline-block; margin-top: 16px; font-size: 14px; line-height: 1.5; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--line-strong); }
+      .scenario-text-link:hover { text-decoration-color: var(--black); }
+      @media (min-width: 768px) {
+        .scenario-feature-grid, .scenario-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .scenario-comparison { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(4, auto); row-gap: 0; }
+        .scenario-compare-card { display: grid; grid-template-rows: subgrid; grid-row: span 4; }
+      }
+
+    </style>
+
+      <meta property="og:title" content="Telegram-бот по сценарию | NeiroForYou">
+      <meta property="og:description" content="Бот с базовым набором функций: работает по заданным кнопкам, шагам и ответам. Базовый вариант: 15 000 ₽; дополнительные функции рассчитываются отдельно.">
+      <meta property="og:url" content="https://neiroforyou.ru/services/telegram-bot/">
+      <meta property="og:image" content="https://neiroforyou.ru/media/og-cover.jpg">
+      <meta property="og:type" content="website">
+      <meta property="og:site_name" content="NeiroForYou">
+      <meta property="og:locale" content="ru_RU">
+      <meta property="og:image:alt" content="NeiroForYou: AI-агенты, боты и приложения для бизнеса">
+      <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Service",
+      "@id": "https://neiroforyou.ru/services/telegram-bot/#service",
+      "name": "Telegram-бот по сценарию",
+      "description": "Бот с базовым набором функций: работает по заданным кнопкам, шагам и ответам. Базовый вариант: 15 000 ₽; дополнительные функции рассчитываются отдельно.",
+      "url": "https://neiroforyou.ru/services/telegram-bot/",
+      "provider": {
+        "@id": "https://neiroforyou.ru/#organization"
+      },
+      "areaServed": "RU",
+      "inLanguage": "ru-RU",
+      "offers": {
+        "@type": "Offer",
+        "url": "https://neiroforyou.ru/services/telegram-bot/",
+        "description": "Базовый вариант. Дополнительные функции рассчитываются отдельно. Без AI-ассистента и аватара.",
+        "price": "15000",
+        "priceCurrency": "RUB"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://neiroforyou.ru/services/telegram-bot/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "NeiroForYou",
+          "item": "https://neiroforyou.ru/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Telegram-бот по сценарию",
+          "item": "https://neiroforyou.ru/services/telegram-bot/"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+      <link rel="stylesheet" href="/assets/site-motion.css?v=4">
+      <link rel="stylesheet" href="/assets/fonts/inter.css?v=20261014">
+  <link rel="stylesheet" href="/assets/site-enhancements.css?v=1">
+</head>
+  <body>
+    <nav class="site-nav" aria-label="Навигация">
+      <a class="brand" href="/" aria-label="Вернуться на главную">
+        <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true">
+          <rect x="11" y="7" width="5" height="26" rx="2.5" transform="rotate(-35 13.5 20)" fill="#050505"></rect>
+          <rect x="23" y="7" width="5" height="26" rx="2.5" transform="rotate(-35 25.5 20)" fill="#050505"></rect>
+        </svg>
+        <span class="brand-text">NeiroForYou</span>
+      </a>
+      <a class="back-link" href="/#solutions" data-metrika-goal="back_to_showcase">Вернуться к витрине</a>
+    </nav>
+
+    <main class="page-main">
+      <svg class="scenario-icon-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+        <symbol id="scenario-menu" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol>
+        <symbol id="scenario-comment" viewBox="0 0 24 24"><path d="M21 11a9 9 0 0 1-9 9H8l-5 2 1-6a9 9 0 1 1 17-5Z"/></symbol>
+        <symbol id="scenario-document" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></symbol>
+        <symbol id="scenario-file" viewBox="0 0 24 24"><path d="M6 2h8l4 4v16H6ZM14 2v5h4M9 12h6M9 16h6"/></symbol>
+        <symbol id="scenario-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 2v6M17 2v6M3 11h18"/></symbol>
+      </defs></svg>
+      <header class="scenario-intro">
+        <p class="page-kicker">Витрина решений</p>
+        <h1>Telegram-бот по сценарию</h1>
+        <p class="page-description">Бот с базовым набором функций: работает по заданным кнопкам, шагам и ответам.</p>
+        <p class="agent-price-main"><span>15 000 ₽</span></p>
+        <p class="scenario-caption">Без AI-ассистента и говорящих аватаров.</p>
+        <p class="scenario-price-note">Стоимость базового бота. Дополнительные функции и сложность сценария увеличивают цену.</p>
+        <div class="scenario-actions">
+          <a class="page-cta" href="https://t.me/dejavy30" data-metrika-goal="click_telegram" target="_blank" rel="noopener noreferrer">Обсудить бота</a>
+          <a class="page-cta-secondary" href="/#solutions" data-metrika-goal="back_to_showcase">Вернуться к витрине</a>
+        </div>
+      </header>
+      <div class="page-stack">
+        <section class="scenario-section" aria-labelledby="scenario-features-title">
+          <h2 id="scenario-features-title">Что можно настроить</h2>
+          <div class="scenario-feature-grid">
+            <article class="process-panel scenario-feature"><svg class="scenario-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#scenario-menu"></use></svg><h3>Меню с кнопками.</h3></article>
+            <article class="process-panel scenario-feature"><svg class="scenario-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#scenario-comment"></use></svg><h3>Готовые ответы.</h3></article>
+            <article class="process-panel scenario-feature"><svg class="scenario-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#scenario-document"></use></svg><h3>Приём заявок.</h3></article>
+            <article class="process-panel scenario-feature"><svg class="scenario-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#scenario-document"></use></svg><h3>Анкеты и опросы.</h3></article>
+            <article class="process-panel scenario-feature"><svg class="scenario-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#scenario-file"></use></svg><h3>Выдача файлов.</h3></article>
+            <article class="process-panel scenario-feature"><svg class="scenario-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#scenario-calendar"></use></svg><h3>Запись на услуги.</h3></article>
+          </div>
+          <p class="scenario-note">Это возможные функции. Состав базового заказа фиксируем перед разработкой.</p>
+        </section>
+        <section class="scenario-section" aria-labelledby="scenario-example-title">
+          <h2 id="scenario-example-title">Пример сценария</h2>
+          <ol class="steps scenario-steps">
+            <li>Выбор услуги</li>
+            <li>Ответы на вопросы анкеты</li>
+            <li>Отправка заявки</li>
+          </ol>
+          <p class="scenario-note">Схема возможного сценария. Это не демонстрация действующего бота.</p>
+        </section>
+        <section class="scenario-section bot-demo" aria-labelledby="scenario-compare-title" data-bot-demo>
+<h2 id="scenario-compare-title">Один вопрос. Два способа ответить.</h2><p>Посмотри, чем отличается сценарный бот от AI-ассистента.</p>
+<div class="bot-demo-tabs" hidden role="tablist" aria-label="Вариант бота"><button type="button" role="tab" id="tab-scripted" aria-controls="bot-scripted" aria-selected="true" tabindex="0" data-bot-tab="scripted">По сценарию</button><button type="button" role="tab" id="tab-ai" aria-controls="bot-ai" aria-selected="false" tabindex="-1" data-bot-tab="ai">С AI-ассистентом</button></div><div class="bot-mode" id="bot-scripted" data-bot-mode="scripted">
+ <div class="demo-conversation"><p class="demo-kicker">Условный пример диалога</p><p class="demo-question">Можно подобрать обучение для новичка? Я могу заниматься только вечером.</p><p class="demo-answer">Выбери раздел меню, чтобы посмотреть программу и условия обучения.</p><div class="demo-menu"><button type="button" data-demo-answer="Здесь бот показывает заранее подготовленное описание программы.">Программы</button><button type="button" data-demo-answer="Здесь бот показывает заранее подготовленный прайс.">Стоимость</button></div><p class="demo-local-answer" data-demo-local hidden aria-live="polite"></p></div>
+ <div class="demo-product"><h3>Бот по сценарию</h3><p class="demo-price">15 000 ₽</p><p>Меню, заранее заданные шаги и готовые ответы.</p><ul><li>Меню и кнопки.</li><li>Приём заявок по сценарию.</li><li>Выдача готовой информации.</li><li>Без AI-ассистента и говорящего аватара.</li></ul><p class="demo-footnote">Стоимость базового варианта. Дополнительные функции рассчитываются отдельно.</p><div class="demo-actions"><a class="page-cta" href="https://t.me/dejavy30" target="_blank" rel="noopener noreferrer">Обсудить бота</a></div></div></div><div class="bot-mode" id="bot-ai" data-bot-mode="ai">
+ <div class="demo-conversation"><p class="demo-kicker">Условный пример диалога</p><p class="demo-question">Можно подобрать обучение для новичка? Я могу заниматься только вечером.</p><p class="demo-answer">Для новичка подойдёт базовая программа. Подскажи, тебе удобнее учиться по записям или с сопровождением?</p></div>
+ <div class="demo-product"><h3>Отвечает по смыслу</h3><p class="demo-price">35 000 ₽</p><p>Использует базу знаний бизнеса и учитывает вопрос посетителя.</p><ul><li>Ответы на свободные вопросы.</li><li>Работа с базой знаний.</li><li>Текстовые и голосовые сообщения.</li><li>Говорящий аватар.</li></ul><p class="demo-footnote">Сервер и использование AI API оплачиваются отдельно.</p><div class="demo-actions"><a class="page-cta" href="https://t.me/masterskayaai_bot" target="_blank" rel="noopener noreferrer">Попробовать AI-бота</a><a class="page-cta-secondary" href="https://t.me/dejavy30" target="_blank" rel="noopener noreferrer">Обсудить задачу</a></div></div></div><p class="demo-footnote">Пример на условных материалах. Ответы зависят от сценария и базы знаний.</p></section>
+        <section class="process-panel" aria-labelledby="scenario-development-title">
+          <h2 id="scenario-development-title">Как проходит разработка</h2>
+          <ol class="steps">
+            <li>Обсуждаем задачу.</li>
+            <li>Согласуем сценарий, функции и стоимость.</li>
+            <li>Собираю и проверяю бота.</li>
+            <li>Запускаем и передаём заказчику.</li>
+          </ol>
+        </section>
+        <section class="process-panel" aria-labelledby="scenario-materials-title">
+          <h2 id="scenario-materials-title">Что подготовить</h2>
+          <ul class="dash-list">
+            <li>Тексты меню и готовые ответы.</li>
+            <li>Файлы и ссылки для выдачи.</li>
+            <li>Поля заявки и порядок действий.</li>
+          </ul>
+        </section>
+        <section class="process-panel" aria-labelledby="scenario-contact-title">
+          <h2 id="scenario-contact-title">Расскажи, что должен делать бот</h2>
+          <div class="scenario-actions">
+            <a class="page-cta" href="https://t.me/dejavy30" data-metrika-goal="click_telegram" target="_blank" rel="noopener noreferrer">Обсудить бота</a>
+            <a class="page-cta-secondary" href="/#solutions" data-metrika-goal="back_to_showcase">Вернуться к витрине</a>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer legal-footer" aria-label="Сведения об исполнителе и правовая информация">
+  <div class="legal-footer-grid">
+    <section aria-labelledby="executor-title">
+      <h2 id="executor-title">Исполнитель</h2>
+      <p>NeiroForYou</p>
+      <p>Хатченко Лариса Дмитриевна</p>
+      <p>Плательщик налога на профессиональный доход</p>
+      <p>ИНН 027759147558</p>
+      <p>Уфа</p>
+      <p><a href="tel:+79872444010">+7 987 244-40-10</a></p>
+      <p><a href="mailto:dejavy1985@gmail.com">dejavy1985@gmail.com</a></p>
+    </section>
+    <section aria-labelledby="legal-title">
+      <h2 id="legal-title">Правовая информация</h2>
+      <p><a href="/privacy/">Политика обработки персональных данных</a></p>
+      <p><button class="legal-text-button" type="button" data-cookie-settings>Настройки cookies</button></p>
+      <p><a href="/#how-to-order">Условия заказа</a></p>
+      <noscript><p>JavaScript отключён. Аналитика не запускается. Для изменения настроек включи JavaScript.</p></noscript>
+    </section>
+  </div>
+  <p class="legal-disclaimer">Instagram принадлежит компании Meta Platforms Inc., деятельность которой по реализации социальных сетей Facebook и Instagram запрещена в Российской Федерации по основаниям осуществления экстремистской деятельности.</p>
+</footer>
+<dialog class="consent-dialog" aria-labelledby="consent-title" data-consent-dialog>
+  <form method="dialog" data-consent-form>
+    <h2 id="consent-title">Настройки cookies</h2>
+    <p>Техническое хранение сохраняет твой выбор. Аналитика Яндекс.Метрики помогает понять, как пользуются сайтом.</p>
+    <p data-consent-status></p>
+    <label class="consent-choice"><input type="checkbox" name="analytics"> Разрешить аналитику Яндекс.Метрики</label>
+    <p>Отключение прекращает новую отправку аналитики, но не удаляет сведения, уже переданные Яндексу.</p>
+    <div class="consent-dialog-actions">
+      <button class="page-cta" type="submit" value="save" data-consent-save>Сохранить</button>
+      <button class="page-cta-secondary" type="button" data-consent-close>Закрыть без сохранения</button>
+    </div>
+  </form>
+</dialog>
+
+
+    <div class="cookie-banner" data-cookie-banner hidden role="dialog" aria-live="polite" aria-label="Согласие на cookies">
+      <p>
+        Мы используем cookies, чтобы понимать, как посетители пользуются сайтом.
+        Подробнее: в <a href="/privacy/">политике конфиденциальности</a>.
+      </p>
+      <div class="cookie-actions">
+        <button class="cookie-accept" type="button" data-cookie-accept>Принять</button>
+        <button class="cookie-decline" type="button" data-cookie-decline>Отклонить</button>
+      </div>
+    </div>
+
+    <script>
+
+    </script>
+    <script src="/assets/audio/voice.js?v=5" defer></script>
+      <script src="/assets/site-motion.js?v=4" defer></script>
+  <script src="/assets/site-consent.js?v=1" defer></script>
+<script src="/assets/product-interactions.js?v=1" defer></script>
+</body>
+</html>
